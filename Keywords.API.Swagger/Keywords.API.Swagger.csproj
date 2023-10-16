@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <DocumentationFile>Docs.xml</DocumentationFile>
+        <DocumentationMarkdown>../README.md</DocumentationMarkdown>
+        <VsxmdAutoDeleteXml>true</VsxmdAutoDeleteXml>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NJsonSchema" Version="10.9.0" />
+        <PackageReference Include="NSwag.MSBuild" Version="13.20.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Vsxmd" Version="1.4.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+    </ItemGroup>
+
+    <Target Name="NSwag" BeforeTargets="Build">
+        <Exec Command="$(NSwagExe_Net60) run nswag.nswag /variables:Configuration=$(Configuration)" />
+    </Target>
+
+</Project>
