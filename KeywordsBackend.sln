@@ -32,6 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keywords.Data.Models", "Key
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keywords.Data.Repositories", "Keywords.Data.Repositories\Keywords.Data.Repositories.csproj", "{CB3194F0-9A0D-4F89-9347-5D4EC89E3BE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{D355EC7F-0804-41AB-A46B-DF898828F3E3}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\main_keywordsbackend.yml = .github\workflows\main_keywordsbackend.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
