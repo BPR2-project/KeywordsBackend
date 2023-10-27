@@ -12,7 +12,7 @@ public class IndexerService : IIndexerService
     private readonly IIndexerClient _indexerClient;
     private readonly string _apiKey;
     private readonly string _accountId;
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
 
 
     public IndexerService(IIndexerClient indexerClient, IConfiguration configuration, IMapper mapper)
@@ -33,7 +33,6 @@ public class IndexerService : IIndexerService
             throw new Exception("No account found");
         }
         var response = await _indexerClient.GetIndexerOutputAsync(accountInfo.Location, accountInfo.Id, videoId, accountInfo.AccessToken);
-        //var toMap = response?.Videos?.FirstOrDefault()?.Insights.Ocr ?? Array.Empty<Ocr>();
         var toMap = response?.Videos?.FirstOrDefault()?.Insights.Ocr;
 
         if (toMap == null)
