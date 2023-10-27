@@ -1,4 +1,4 @@
-﻿using indexer_api;
+﻿using Keywords.API.Swagger.Controllers.Generated;
 using Keywords.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

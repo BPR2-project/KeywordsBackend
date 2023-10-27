@@ -19,5 +19,6 @@ public class KeywordMapper: Profile
             .ForMember(a => a.Content, opt => opt.MapFrom(a => a.Content))
             .ForMember(a => a.IsPublished, opt => opt.MapFrom(a => a.IsPublished))
             .ForMember(a => a.VideoId, opt => opt.MapFrom(a => a.VideoId));
+        
     }
 }

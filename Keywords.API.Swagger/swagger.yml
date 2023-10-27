@@ -32,6 +32,28 @@ paths:
             $ref: "#/definitions/Keyword"
         404:
           description: Keyword not found
+  /indexer:
+    get:
+      tags:
+        - "indexer"
+      summary: "Get a ocr list of the indexed video"
+      description: "Get a ocr list of the indexed video"
+      operationId: "GetOcrList"
+      parameters:
+        - name: videoId
+          in: query
+          description: Video Id to get the video ocr for
+          required: true
+          type: string
+      responses:
+        200:
+          description: Ocr video found
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Ocr"
+        404:
+          description: Not found
 definitions: 
   Keyword:
     type: object
@@ -50,3 +72,12 @@ definitions:
       IsPublished:
         type: boolean
         description: States if the Keyword is available for users
+  Ocr:
+    type: object
+    properties:
+      text:
+        type: string
+      confidence:
+        type: number
+      language:
+        type: string

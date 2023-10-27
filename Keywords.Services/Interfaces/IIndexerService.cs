@@ -1,4 +1,4 @@
-﻿using indexer_api;
+﻿using Keywords.API.Swagger.Controllers.Generated;
 
 namespace Keywords.Services.Interfaces;
 
