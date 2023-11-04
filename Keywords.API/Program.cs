@@ -1,3 +1,4 @@
+using indexer_api;
 using Keywords.Data;
 using Keywords.Data.Repositories;
 using Keywords.Data.Repositories.Interfaces;
@@ -7,6 +8,9 @@ using Keywords.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// External services
+builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
 
 var dbConnectionString = builder.Configuration.GetConnectionString("KeywordsDb");
 
@@ -19,6 +23,7 @@ builder.Services.AddScoped<IKeywordEntityRepository, KeywordEntityRepository>();
 
 // Services
 builder.Services.AddScoped<IKeywordService, KeywordService>();
+builder.Services.AddScoped<IIndexerService, IndexerService>();
 
 // Mapper
 builder.Services.AddAutoMapper(typeof(BaseProfile));

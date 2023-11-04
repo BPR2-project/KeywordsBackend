@@ -3,6 +3,8 @@
 
 ## Contents
 
+- [IndexerControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase')
+  - [GetOcrList(videoId)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetOcrList-System-String- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.GetOcrList(System.String)')
 - [Keyword](#T-Keywords-API-Swagger-Controllers-Generated-Keyword 'Keywords.API.Swagger.Controllers.Generated.Keyword')
   - [Content](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-Content 'Keywords.API.Swagger.Controllers.Generated.Keyword.Content')
   - [Id](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-Id 'Keywords.API.Swagger.Controllers.Generated.Keyword.Id')
@@ -10,6 +12,34 @@
   - [VideoId](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-VideoId 'Keywords.API.Swagger.Controllers.Generated.Keyword.VideoId')
 - [KeywordControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase')
   - [GetKeyword(keywordId)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetKeyword-System-Guid- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetKeyword(System.Guid)')
+
+<a name='T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase'></a>
+## IndexerControllerBase `type`
+
+##### Namespace
+
+Keywords.API.Swagger.Controllers.Generated
+
+<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetOcrList-System-String-'></a>
+### GetOcrList(videoId) `method`
+
+##### Summary
+
+Get a ocr list of the indexed video
+
+##### Returns
+
+Ocr video found
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| videoId | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video Id to get the video ocr for |
+
+##### Remarks
+
+Get a ocr list of the indexed video
 
 <a name='T-Keywords-API-Swagger-Controllers-Generated-Keyword'></a>
 ## Keyword `type`

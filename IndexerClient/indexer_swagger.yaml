@@ -1,0 +1,125 @@
+swagger: "2.0"
+info:
+  description: "Client responsible to call Azure ai services."
+  version: "1.0.0"
+  title: "Indexer Client"
+host: "api.videoindexer.ai"
+tags:
+  - name: Indexer client
+    description: Everything that goes with indexing the videos
+
+produces:
+  - "application/json"
+schemes:
+  - "https"
+paths:
+  '/auth/trial/Accounts?generateAccessTokens=true&allowEdit=true':
+    get:
+      tags:
+        - indexer
+      operationId: GetToken
+      description: Get authentication token
+      parameters:
+        - name: Ocp-Apim-Subscription-Key
+          in: header
+          type: string
+          required: true
+          description: api key
+        
+      responses:
+        200:
+          description: Returns list of account info
+          schema:
+            $ref: "#/definitions/AccountInfoArray"
+        401:
+          description: Unauthorized
+        404:
+          description: Account not found
+          
+  '/{location}/Accounts/{accountId}/Videos/{videoId}/Index':
+    get:
+      tags:
+        - indexer
+      operationId: GetIndexerOutput
+      description: Get indexer output
+      parameters:
+        - name: location
+          in: path
+          type: string
+          required: true
+          description: location
+        - name: accountId
+          in: path
+          type: string
+          required: true
+          description: accountId
+        - name: videoId
+          in: path
+          type: string
+          required: true
+          description: videoId
+        - name: accessToken
+          in: query
+          type: string
+          required: true
+          description: accessToken
+      
+      responses:
+        200:
+          description: Returns indexer output
+          schema:
+            $ref: "#/definitions/VideoIndexerResponse"
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+
+definitions:
+  AccountInfo:
+    type: object
+    properties:
+      id:
+        type: string
+      location:
+        type: string
+      accessToken:
+        type: string
+        
+  AccountInfoArray:
+    type: array
+    items:
+      $ref: '#/definitions/AccountInfo'
+
+        
+  Ocr:
+    type: object
+    properties: 
+      text:
+        type: string
+      confidence:
+        type: number
+      language:
+        type: string
+  
+  Insights:
+    type: object
+    properties:
+      ocr:
+        type: array
+        items:
+          $ref: '#/definitions/Ocr'
+    
+  Video:
+    type: object
+    properties: 
+      insights:
+        $ref: '#/definitions/Insights'
+  
+  VideoIndexerResponse:
+      type: object
+      properties: 
+        videos:
+          type: array
+          items:
+            $ref: '#/definitions/Video'
