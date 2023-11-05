@@ -5,6 +5,7 @@
 
 - [IndexerControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase')
   - [GetOcrList(videoId)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetOcrList-System-String- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.GetOcrList(System.String)')
+  - [IndexVideo(url,name,description)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-String,System-String,System-String- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.IndexVideo(System.String,System.String,System.String)')
 - [Keyword](#T-Keywords-API-Swagger-Controllers-Generated-Keyword 'Keywords.API.Swagger.Controllers.Generated.Keyword')
   - [Content](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-Content 'Keywords.API.Swagger.Controllers.Generated.Keyword.Content')
   - [Id](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-Id 'Keywords.API.Swagger.Controllers.Generated.Keyword.Id')
@@ -40,6 +41,29 @@ Ocr video found
 ##### Remarks
 
 Get a ocr list of the indexed video
+
+<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-String,System-String,System-String-'></a>
+### IndexVideo(url,name,description) `method`
+
+##### Summary
+
+Index a video
+
+##### Returns
+
+Video indexed
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| url | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video url to index |
+| name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video name to index |
+| description | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video description to index |
+
+##### Remarks
+
+Index a video
 
 <a name='T-Keywords-API-Swagger-Controllers-Generated-Keyword'></a>
 ## Keyword `type`
