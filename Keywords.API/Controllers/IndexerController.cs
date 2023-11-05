@@ -17,15 +17,9 @@ public class IndexerController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("GetIndexerOutput")]
-    public Task<ICollection<Video>> GetIndexerOutput(string videoId)
+    [HttpGet(Name = "GetIndexerOutput")]
+    public Task<ICollection<Ocr>> GetIndexerOutput(string videoId)
     {
-        return _indexerService.GetIndexerOutputAsync(videoId);
-    }
-    
-    [HttpPost( "IndexVideo")]
-    public Task<RequestVideoIndexResponse> IndexVideo(string url, string videoName, string description)
-    {
-        return _indexerService.IndexVideoAsync(url, videoName, description);
+        return _indexerService.GetKeywordsAsync(videoId);
     }
 }

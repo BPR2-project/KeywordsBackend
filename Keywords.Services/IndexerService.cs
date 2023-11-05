@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using indexer_api;
+using Keywords.API.Swagger.Controllers.Generated;
 using Keywords.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
-using RequestVideoIndexResponse = Keywords.API.Swagger.Controllers.Generated.RequestVideoIndexResponse;
-using Video = Keywords.API.Swagger.Controllers.Generated.Video;
+using Ocr = Keywords.API.Swagger.Controllers.Generated.Ocr;
 
 namespace Keywords.Services;
 
@@ -23,7 +23,7 @@ public class IndexerService : IIndexerService
         _accountId = configuration["Indexer:AccountId"];
     }
     
-    public async Task<ICollection<Video>> GetIndexerOutputAsync(string videoId)
+    public async Task<ICollection<Ocr>> GetKeywordsAsync(string videoId)
     {
         var accountInfos = await _indexerClient.GetTokenAsync(_apiKey);
         
@@ -33,34 +33,13 @@ public class IndexerService : IIndexerService
             throw new Exception("No account found");
         }
         var response = await _indexerClient.GetIndexerOutputAsync(accountInfo.Location, accountInfo.Id, videoId, accountInfo.AccessToken);
-        var toMap = response?.Videos;
+        var toMap = response?.Videos?.FirstOrDefault()?.Insights.Ocr;
 
         if (toMap == null)
         {
             throw new Exception("No Indexer output found");
         }
         
-        return _mapper.Map<ICollection<Video>>(toMap);
+        return _mapper.Map<ICollection<Ocr>>(toMap);
     }
-
-    public async Task<RequestVideoIndexResponse> IndexVideoAsync(string url, string videoName, string description)
-    {
-        var accountInfos = await _indexerClient.GetTokenAsync(_apiKey);
-        var accountInfo = accountInfos?.FirstOrDefault(x => x.Id == _accountId);
-        if (accountInfo == null)
-        {
-            throw new Exception("No account found");
-        }
-
-        try
-        {
-            var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id, accountInfo.AccessToken, videoName, url, description, "private", "partition");
-            return _mapper.Map<RequestVideoIndexResponse>(response);
-        }
-        catch (ApiException<IndexInProgress> e)
-        {
-            return _mapper.Map<RequestVideoIndexResponse>(e.Result);
-        }
-    }
-
 }

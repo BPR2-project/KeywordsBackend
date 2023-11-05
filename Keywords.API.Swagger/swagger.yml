@@ -51,36 +51,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/Video"
-        404:
-          description: Not found
-    post:
-      tags:
-        - "indexer"
-      summary: "Index a video"
-      description: "Index a video"
-      operationId: "IndexVideo"
-      parameters:
-        - name: url
-          in: query
-          description: Video url to index
-          required: true
-          type: string
-        - name: name
-          in: query
-          description: Video name to index
-          required: true
-          type: string
-        - name: description
-          in: query
-          description: Video description to index
-          required: true
-          type: string
-      responses:
-        200:
-          description: Video indexed
-          schema:
-              $ref: "#/definitions/RequestVideoIndexResponse"
+              $ref: "#/definitions/Ocr"
         404:
           description: Not found
 definitions: 
@@ -110,58 +81,3 @@ definitions:
         type: number
       language:
         type: string
-  Insights:
-    type: object
-    properties:
-      ocr:
-        type: array
-        items:
-          $ref: '#/definitions/Ocr'  
-          
-  Video:
-    type: object
-    properties:
-      id:
-        type: string
-      state:
-        type: string
-      processingProgress:
-        type: string
-      insights:
-        $ref: '#/definitions/Insights'
-        
-  VideoIndexerResponse:
-    type: object
-    properties:
-      videos:
-        type: array
-        items:
-          $ref: '#/definitions/Video'
-
-  IndexInProgress:
-    type: object
-    properties:
-      errorType:
-        type: string
-      message:
-        type: string
-
-  IndexVideoReceipt:
-    type: object
-    properties:
-      accountId:
-        type: string
-      id:
-        type: string
-      description:
-        type: string
-      state:
-        type: string
-
-  RequestVideoIndexResponse:
-    type: object
-    properties:
-      receipt:
-        $ref: '#/definitions/IndexVideoReceipt'
-      indexInProgress:
-        $ref: '#/definitions/IndexInProgress'
