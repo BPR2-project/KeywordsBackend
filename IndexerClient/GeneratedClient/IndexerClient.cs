@@ -44,6 +44,22 @@ namespace indexer_api
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<VideoIndexerResponse> GetIndexerOutputAsync(string location, string accountId, string videoId, string accessToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Request video index
+        /// </remarks>
+        /// <param name="location">location</param>
+        /// <param name="accountId">accountId</param>
+        /// <param name="accessToken">accessToken</param>
+        /// <param name="name">video name</param>
+        /// <param name="videoUrl">video url</param>
+        /// <param name="description">video description</param>
+        /// <param name="privacy">video privacy</param>
+        /// <param name="partition">partition?</param>
+        /// <returns>Returns video index</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -269,6 +285,134 @@ namespace indexer_api
             }
         }
 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Request video index
+        /// </remarks>
+        /// <param name="location">location</param>
+        /// <param name="accountId">accountId</param>
+        /// <param name="accessToken">accessToken</param>
+        /// <param name="name">video name</param>
+        /// <param name="videoUrl">video url</param>
+        /// <param name="description">video description</param>
+        /// <param name="privacy">video privacy</param>
+        /// <param name="partition">partition?</param>
+        /// <returns>Returns video index</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (location == null)
+                throw new System.ArgumentNullException("location");
+
+            if (accountId == null)
+                throw new System.ArgumentNullException("accountId");
+
+            if (accessToken == null)
+                throw new System.ArgumentNullException("accessToken");
+
+            if (name == null)
+                throw new System.ArgumentNullException("name");
+
+            if (videoUrl == null)
+                throw new System.ArgumentNullException("videoUrl");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/{location}/Accounts/{accountId}/Videos?");
+            urlBuilder_.Replace("{location}", System.Uri.EscapeDataString(ConvertToString(location, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{accountId}", System.Uri.EscapeDataString(ConvertToString(accountId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append(System.Uri.EscapeDataString("accessToken") + "=").Append(System.Uri.EscapeDataString(ConvertToString(accessToken, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("videoUrl") + "=").Append(System.Uri.EscapeDataString(ConvertToString(videoUrl, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            if (description != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (privacy != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("privacy") + "=").Append(System.Uri.EscapeDataString(ConvertToString(privacy, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (partition != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("partition") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partition, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
+
+            var client_ = new System.Net.Http.HttpClient();
+            var disposeClient_ = true;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<IndexVideoReceipt>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<IndexInProgress>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<IndexInProgress>("Video already in process", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
         protected struct ObjectResponseResult<T>
         {
             public ObjectResponseResult(T responseObject, string responseText)
@@ -417,6 +561,15 @@ namespace indexer_api
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Video
     {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("state", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string State { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("processingProgress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ProcessingProgress { get; set; }
+
         [Newtonsoft.Json.JsonProperty("insights", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public Insights Insights { get; set; }
 
@@ -427,6 +580,34 @@ namespace indexer_api
     {
         [Newtonsoft.Json.JsonProperty("videos", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<Video> Videos { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class IndexInProgress
+    {
+        [Newtonsoft.Json.JsonProperty("errorType", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorType { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Message { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class IndexVideoReceipt
+    {
+        [Newtonsoft.Json.JsonProperty("accountId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string AccountId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Description { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("state", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string State { get; set; }
 
     }
 
