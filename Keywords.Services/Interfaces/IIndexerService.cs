@@ -4,5 +4,6 @@ namespace Keywords.Services.Interfaces;
 
 public interface IIndexerService
 {
-    Task<ICollection<Ocr>> GetKeywordsAsync(string videoId);
+    Task<ICollection<Video>> GetIndexerOutputAsync(string videoId);
+    Task<RequestVideoIndexResponse> IndexVideoAsync(string url, string videoName, string description);
 }
