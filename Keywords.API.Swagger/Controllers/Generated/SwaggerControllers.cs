@@ -24,6 +24,17 @@ namespace Keywords.API.Swagger.Controllers.Generated
     public abstract class KeywordControllerBase : Microsoft.AspNetCore.Mvc.Controller
     {
         /// <summary>
+        /// Get paginated keywords for a video
+        /// </summary>
+        /// <remarks>
+        /// Get paginated keywords for a video
+        /// </remarks>
+        /// <param name="paginatedKeywordsRequest">Contains pagination details</param>
+        /// <returns>Returns all keywords paginated</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("keywords/")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<PaginatedKeywordsResponse>> GetAllKeywordsByVideoId([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] PaginatedKeywordsRequest paginatedKeywordsRequest);
+
+        /// <summary>
         /// Get a keyword by its id
         /// </summary>
         /// <remarks>
@@ -33,6 +44,18 @@ namespace Keywords.API.Swagger.Controllers.Generated
         /// <returns>Keyword found</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("keyword/keywordId/{keywordId}")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Keyword>> GetKeyword([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid keywordId);
+
+        /// <summary>
+        /// Publish a keyword using its id
+        /// </summary>
+        /// <remarks>
+        /// Publish keyboard using its id
+        /// </remarks>
+        /// <param name="keywordId">Keyword Id</param>
+        /// <param name="toBePublished">Bool to state whether will be published or not</param>
+        /// <returns>Keyword published</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("keyword/keywordId/{keywordId}")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Keyword>> PublishKeyword([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid keywordId, [Microsoft.AspNetCore.Mvc.FromQuery] bool? toBePublished);
 
     }
 
@@ -93,6 +116,18 @@ namespace Keywords.API.Swagger.Controllers.Generated
         [Newtonsoft.Json.JsonProperty("IsPublished", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool? IsPublished { get; set; }
 
+        /// <summary>
+        /// The language the keyword belongs to
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("Language", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Language { get; set; }
+
+        /// <summary>
+        /// Link to the keyword's audio
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("AudioLink", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string AudioLink { get; set; }
+
         public string ToJson()
         {
 
@@ -130,6 +165,90 @@ namespace Keywords.API.Swagger.Controllers.Generated
         {
 
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Ocr>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PaginatedKeywordsRequest
+    {
+        /// <summary>
+        /// Video Id to get the keywords for
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("VideoId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid? VideoId { get; set; }
+
+        /// <summary>
+        /// Size of the page
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("Size", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Size { get; set; }
+
+        /// <summary>
+        /// Page number
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("Page", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Page { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static PaginatedKeywordsRequest FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedKeywordsRequest>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PaginatedKeywordsResponse
+    {
+        /// <summary>
+        /// List of videos
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("Keywords", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.List<Keyword> Keywords { get; set; }
+
+        /// <summary>
+        /// Size of the page that was requested
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("SizeRequested", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SizeRequested { get; set; }
+
+        /// <summary>
+        /// Total number of keywords retrieved
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("TotalAmount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? TotalAmount { get; set; }
+
+        /// <summary>
+        /// Current page
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("CurrentPage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? CurrentPage { get; set; }
+
+        /// <summary>
+        /// Total number of pages based on the specified size
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("TotalAmountOfPages", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? TotalAmountOfPages { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static PaginatedKeywordsResponse FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedKeywordsResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 

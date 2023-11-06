@@ -45,6 +45,18 @@
             <param name="videoId">Video Id to get the video ocr for</param>
             <returns>Ocr video found</returns>
         </member>
+        <member name="M:Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.IndexVideo(System.String,System.String,System.String)">
+            <summary>
+            Index a video
+            </summary>
+            <remarks>
+            Index a video
+            </remarks>
+            <param name="url">Video url to index</param>
+            <param name="name">Video name to index</param>
+            <param name="description">Video description to index</param>
+            <returns>Video indexed</returns>
+        </member>
         <member name="P:Keywords.API.Swagger.Controllers.Generated.Keyword.Id">
             <summary>
             Id of the keyword
