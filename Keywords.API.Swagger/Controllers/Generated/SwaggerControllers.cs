@@ -24,17 +24,6 @@ namespace Keywords.API.Swagger.Controllers.Generated
     public abstract class KeywordControllerBase : Microsoft.AspNetCore.Mvc.Controller
     {
         /// <summary>
-        /// Get paginated keywords for a video
-        /// </summary>
-        /// <remarks>
-        /// Get paginated keywords for a video
-        /// </remarks>
-        /// <param name="paginatedKeywordsRequest">Contains pagination details</param>
-        /// <returns>Returns all keywords paginated</returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("keywords/")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<PaginatedKeywordsResponse>> GetAllKeywordsByVideoId([Microsoft.AspNetCore.Mvc.FromBody] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] PaginatedKeywordsRequest paginatedKeywordsRequest);
-
-        /// <summary>
         /// Get a keyword by its id
         /// </summary>
         /// <remarks>
@@ -44,18 +33,6 @@ namespace Keywords.API.Swagger.Controllers.Generated
         /// <returns>Keyword found</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("keyword/keywordId/{keywordId}")]
         public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Keyword>> GetKeyword([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid keywordId);
-
-        /// <summary>
-        /// Publish a keyword using its id
-        /// </summary>
-        /// <remarks>
-        /// Publish keyboard using its id
-        /// </remarks>
-        /// <param name="keywordId">Keyword Id</param>
-        /// <param name="toBePublished">Bool to state whether will be published or not</param>
-        /// <returns>Keyword published</returns>
-        [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("keyword/keywordId/{keywordId}")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Keyword>> PublishKeyword([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid keywordId, [Microsoft.AspNetCore.Mvc.FromQuery] bool? toBePublished);
 
     }
 
@@ -72,7 +49,20 @@ namespace Keywords.API.Swagger.Controllers.Generated
         /// <param name="videoId">Video Id to get the video ocr for</param>
         /// <returns>Ocr video found</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("indexer")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<Ocr>>> GetOcrList([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string videoId);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.ICollection<Video>>> GetOcrList([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string videoId);
+
+        /// <summary>
+        /// Index a video
+        /// </summary>
+        /// <remarks>
+        /// Index a video
+        /// </remarks>
+        /// <param name="url">Video url to index</param>
+        /// <param name="name">Video name to index</param>
+        /// <param name="description">Video description to index</param>
+        /// <returns>Video indexed</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("indexer")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<RequestVideoIndexResponse>> IndexVideo([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string url, [Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string name, [Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string description);
 
     }
 
@@ -102,18 +92,6 @@ namespace Keywords.API.Swagger.Controllers.Generated
         /// </summary>
         [Newtonsoft.Json.JsonProperty("IsPublished", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool? IsPublished { get; set; }
-
-        /// <summary>
-        /// The language the keyword belongs to
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("Language", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Language { get; set; }
-
-        /// <summary>
-        /// Link to the keyword's audio
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("AudioLink", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string AudioLink { get; set; }
 
         public string ToJson()
         {
@@ -158,25 +136,10 @@ namespace Keywords.API.Swagger.Controllers.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class PaginatedKeywordsRequest
+    public partial class Insights
     {
-        /// <summary>
-        /// Video Id to get the keywords for
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("VideoId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid? VideoId { get; set; }
-
-        /// <summary>
-        /// Size of the page
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("Size", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Size { get; set; }
-
-        /// <summary>
-        /// Page number
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("Page", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Page { get; set; }
+        [Newtonsoft.Json.JsonProperty("ocr", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.List<Ocr> Ocr { get; set; }
 
         public string ToJson()
         {
@@ -184,47 +147,29 @@ namespace Keywords.API.Swagger.Controllers.Generated
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static PaginatedKeywordsRequest FromJson(string data)
+        public static Insights FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedKeywordsRequest>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Insights>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class PaginatedKeywordsResponse
+    public partial class Video
     {
-        /// <summary>
-        /// List of videos
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("Keywords", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.List<Keyword> Keywords { get; set; }
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
 
-        /// <summary>
-        /// Size of the page that was requested
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("SizeRequested", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? SizeRequested { get; set; }
+        [Newtonsoft.Json.JsonProperty("state", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string State { get; set; }
 
-        /// <summary>
-        /// Total number of keywords retrieved
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("TotalAmount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? TotalAmount { get; set; }
+        [Newtonsoft.Json.JsonProperty("processingProgress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ProcessingProgress { get; set; }
 
-        /// <summary>
-        /// Current page
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("CurrentPage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? CurrentPage { get; set; }
-
-        /// <summary>
-        /// Total number of pages based on the specified size
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("TotalAmountOfPages", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? TotalAmountOfPages { get; set; }
+        [Newtonsoft.Json.JsonProperty("insights", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Insights Insights { get; set; }
 
         public string ToJson()
         {
@@ -232,10 +177,109 @@ namespace Keywords.API.Swagger.Controllers.Generated
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static PaginatedKeywordsResponse FromJson(string data)
+        public static Video FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedKeywordsResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Video>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class VideoIndexerResponse
+    {
+        [Newtonsoft.Json.JsonProperty("videos", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.List<Video> Videos { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static VideoIndexerResponse FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<VideoIndexerResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class IndexInProgress
+    {
+        [Newtonsoft.Json.JsonProperty("errorType", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorType { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Message { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static IndexInProgress FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IndexInProgress>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class IndexVideoReceipt
+    {
+        [Newtonsoft.Json.JsonProperty("accountId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string AccountId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Description { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("state", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string State { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static IndexVideoReceipt FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IndexVideoReceipt>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RequestVideoIndexResponse
+    {
+        [Newtonsoft.Json.JsonProperty("receipt", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public IndexVideoReceipt Receipt { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("indexInProgress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public IndexInProgress IndexInProgress { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static RequestVideoIndexResponse FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RequestVideoIndexResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
