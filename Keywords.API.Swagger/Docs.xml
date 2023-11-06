@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Keywords.API.Swagger</name>
+    </assembly>
+    <members>
+        <member name="M:Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetAllKeywordsByVideoId(Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest)">
+            <summary>
+            Get paginated keywords for a video
+            </summary>
+            <remarks>
+            Get paginated keywords for a video
+            </remarks>
+            <param name="paginatedKeywordsRequest">Contains pagination details</param>
+            <returns>Returns all keywords paginated</returns>
+        </member>
+        <member name="M:Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetKeyword(System.Guid)">
+            <summary>
+            Get a keyword by its id
+            </summary>
+            <remarks>
+            Get a keyword by its id
+            </remarks>
+            <param name="keywordId">Keyword Id to get the keyword entity for</param>
+            <returns>Keyword found</returns>
+        </member>
+        <member name="M:Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.PublishKeyword(System.Guid,System.Nullable{System.Boolean})">
+            <summary>
+            Publish a keyword using its id
+            </summary>
+            <remarks>
+            Publish keyboard using its id
+            </remarks>
+            <param name="keywordId">Keyword Id</param>
+            <param name="toBePublished">Bool to state whether will be published or not</param>
+            <returns>Keyword published</returns>
+        </member>
+        <member name="M:Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.GetOcrList(System.String)">
+            <summary>
+            Get a ocr list of the indexed video
+            </summary>
+            <remarks>
+            Get a ocr list of the indexed video
+            </remarks>
+            <param name="videoId">Video Id to get the video ocr for</param>
+            <returns>Ocr video found</returns>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.Keyword.Id">
+            <summary>
+            Id of the keyword
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.Keyword.Content">
+            <summary>
+            Keyword's content can be a word or a phrase
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.Keyword.VideoId">
+            <summary>
+            Id of the video that the keyword belongs to
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.Keyword.IsPublished">
+            <summary>
+            States if the Keyword is available for users
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.Keyword.Language">
+            <summary>
+            The language the keyword belongs to
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.Keyword.AudioLink">
+            <summary>
+            Link to the keyword's audio
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest.VideoId">
+            <summary>
+            Video Id to get the keywords for
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest.Size">
+            <summary>
+            Size of the page
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest.Page">
+            <summary>
+            Page number
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.Keywords">
+            <summary>
+            List of videos
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.SizeRequested">
+            <summary>
+            Size of the page that was requested
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.TotalAmount">
+            <summary>
+            Total number of keywords retrieved
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.CurrentPage">
+            <summary>
+            Current page
+            </summary>
+        </member>
+        <member name="P:Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.TotalAmountOfPages">
+            <summary>
+            Total number of pages based on the specified size
+            </summary>
+        </member>
+    </members>
+</doc>

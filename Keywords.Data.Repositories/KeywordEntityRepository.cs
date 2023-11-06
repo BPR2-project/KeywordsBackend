@@ -37,4 +37,25 @@ public class KeywordEntityRepository: BaseRepository<KeywordEntity>, IKeywordEnt
                               && a.DestroyedAt == null
                               && a.DestroyedBy == null);
     }
+
+    public bool KeywordsVideoExistsById(Guid videoId)
+    {
+        return DbSet.Any(a => a.VideoId == videoId && a.DestroyedAt == null && a.DestroyedBy == null);
+    }
+
+    public (List<KeywordEntity>? keywords, int totalsize) GetAllKeywordsByVideoId(Guid videoId, int size, int page)
+    {
+        var query = GetQueryWithAllIncludes();
+
+        query = query.Where(a => a.DestroyedAt == null && a.DestroyedBy == null && a.VideoId == videoId);
+        
+        var totalSize = query.Count();
+
+        query = query
+            .Skip(size * page)
+            .Take(size)
+            .OrderBy(a => a.CreatedAt);
+
+        return (query.ToList(), totalSize);
+    }
 }

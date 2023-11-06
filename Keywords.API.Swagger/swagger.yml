@@ -3,14 +3,37 @@ info:
   description: "Service responsible for handling videos keywords."
   version: "1.0.0"
   title: "Keywords Microservice"
-host: "localhost:7012"
+host: "keywordsbackend.azurewebsites.net"
 basePath: "/"
 tags:
   - name: "keyword"
-    description: "Everything about your Pets"
+    description: "Everything about video keywords"
 schemes:
   - "http"
 paths:
+  /keywords/:
+    post:
+      tags:
+        - "keyword"
+      summary: "Get paginated keywords for a video"
+      description: "Get paginated keywords for a video"
+      operationId: "GetAllKeywordsByVideoId"
+      parameters:
+        - name: PaginatedKeywordsRequest
+          in: body
+          required: true
+          description: Contains pagination details
+          schema:
+            $ref: "#/definitions/PaginatedKeywordsRequest"
+      responses:
+        200:
+          description: Returns all keywords paginated
+          schema:
+            $ref: "#/definitions/PaginatedKeywordsResponse"
+        400:
+          description: Bad request
+        404:
+          description: Video not found
   /keyword/keywordId/{keywordId}:
     get:
       tags:
@@ -28,6 +51,31 @@ paths:
       responses: 
         200: 
           description: Keyword found
+          schema:
+            $ref: "#/definitions/Keyword"
+        404:
+          description: Keyword not found
+    put:
+      tags:
+        - "keyword"
+      summary: "Publish a keyword using its id"
+      description: "Publish keyboard using its id"
+      operationId: PublishKeyword
+      parameters:
+        - name: keywordId
+          in: path
+          description: Keyword Id
+          required: true
+          type: string
+          format: guid
+        - name: toBePublished
+          in: query
+          description: Bool to state whether will be published or not
+          required: false
+          type: boolean
+      responses: 
+        200:
+          description: Keyword published          
           schema:
             $ref: "#/definitions/Keyword"
         404:
@@ -72,6 +120,12 @@ definitions:
       IsPublished:
         type: boolean
         description: States if the Keyword is available for users
+      Language:
+        type: string
+        description: The language the keyword belongs to
+      AudioLink:
+        type: string
+        description: Link to the keyword's audio
   Ocr:
     type: object
     properties:
@@ -81,3 +135,36 @@ definitions:
         type: number
       language:
         type: string
+  PaginatedKeywordsRequest:
+    type: object
+    properties:
+      VideoId:
+        type: string
+        format: guid
+        description: Video Id to get the keywords for
+      Size:
+        type: integer
+        description: Size of the page
+      Page:
+        type: integer
+        description: Page number
+  PaginatedKeywordsResponse:
+    type: object
+    properties:
+      Keywords:
+        type: array
+        description: List of videos
+        items:
+          $ref: '#/definitions/Keyword'
+      SizeRequested:
+        type: integer
+        description: Size of the page that was requested
+      TotalAmount:
+        type: integer
+        description: Total number of keywords retrieved
+      CurrentPage:
+        type: integer
+        description: Current page
+      TotalAmountOfPages:
+        type: integer
+        description: Total number of pages based on the specified size
