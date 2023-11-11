@@ -8,22 +8,27 @@ namespace Keywords.API.Controllers;
 public class KeywordController: KeywordControllerBase
 {
     private readonly IKeywordService _keywordService;
+    private readonly IAzureTextToSpeechService _azureTextToSpeechService;
 
-    public KeywordController(IKeywordService keywordService)
+    public KeywordController(IKeywordService keywordService, IAzureTextToSpeechService azureTextToSpeechService)
     {
         _keywordService = keywordService;
+        _azureTextToSpeechService = azureTextToSpeechService;
     }
 
     public override Task<ActionResult<PaginatedKeywordsResponse>> GetAllKeywordsByVideoId(PaginatedKeywordsRequest paginatedKeywordsRequest)
     {
-        return Task.Run<ActionResult<PaginatedKeywordsResponse>>(() =>
+        return Task.Run<ActionResult<PaginatedKeywordsResponse>>(async () =>
         {
             var modelState = ModelState.GetAllErrors();
             if (modelState.Any())
                 return BadRequest(string.Join("\n", modelState));
+            
+            await _azureTextToSpeechService.ConvertTextToSpeech(paginatedKeywordsRequest.VideoId.Value);
+            
+            // var videoExists = _keywordService.KeywordsVideoExistsById(paginatedKeywordsRequest.VideoId.Value);
 
-            var videoExists = _keywordService.KeywordsVideoExistsById(paginatedKeywordsRequest.VideoId.Value);
-
+            var videoExists = false;
             if (!videoExists)
                 return NotFound();
             

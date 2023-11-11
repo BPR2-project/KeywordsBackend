@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "ssml-builder": "^0.4.3"
+  }
+}
