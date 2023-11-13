@@ -37,7 +37,7 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
         _azureTextToSpeechClient = azureTextToSpeechClient;
         _keywordEntityRepository = keywordEntityRepository;
     }
-
+    
     public async Task ConvertTextToSpeech(Guid videoId)
     {
         var voicesList = await _azureTextToSpeechClient.GetAllVoicesAsync(_subscriptionKey);

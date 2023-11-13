@@ -24,11 +24,8 @@ public class KeywordController: KeywordControllerBase
             if (modelState.Any())
                 return BadRequest(string.Join("\n", modelState));
             
-            await _azureTextToSpeechService.ConvertTextToSpeech(paginatedKeywordsRequest.VideoId.Value);
+            var videoExists = _keywordService.KeywordsVideoExistsById(paginatedKeywordsRequest.VideoId.Value);
             
-            // var videoExists = _keywordService.KeywordsVideoExistsById(paginatedKeywordsRequest.VideoId.Value);
-
-            var videoExists = false;
             if (!videoExists)
                 return NotFound();
             
