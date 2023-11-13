@@ -16,5 +16,6 @@ public class IndexerMapper: Profile
         CreateMap<indexer_api.IndexInProgress, IndexInProgress>();
         CreateMap<indexer_api.Insights, Insights>();
         CreateMap<indexer_api.Ocr, Ocr>();
+        CreateMap<indexer_api.Instance, Instance>();
     }
 }

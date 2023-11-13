@@ -56,9 +56,11 @@ namespace indexer_api
         /// <param name="description">video description</param>
         /// <param name="privacy">video privacy</param>
         /// <param name="partition">partition?</param>
+        /// <param name="indexingPreset">indexing preset</param>
+        /// <param name="customLanguages">custom languages</param>
         /// <returns>Returns video index</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -297,9 +299,11 @@ namespace indexer_api
         /// <param name="description">video description</param>
         /// <param name="privacy">video privacy</param>
         /// <param name="partition">partition?</param>
+        /// <param name="indexingPreset">indexing preset</param>
+        /// <param name="customLanguages">custom languages</param>
         /// <returns>Returns video index</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (location == null)
                 throw new System.ArgumentNullException("location");
@@ -334,6 +338,14 @@ namespace indexer_api
             if (partition != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("partition") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partition, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (indexingPreset != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("indexingPreset") + "=").Append(System.Uri.EscapeDataString(ConvertToString(indexingPreset, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (customLanguages != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("customLanguages") + "=").Append(System.Uri.EscapeDataString(ConvertToString(customLanguages, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             urlBuilder_.Length--;
 
@@ -548,6 +560,34 @@ namespace indexer_api
         [Newtonsoft.Json.JsonProperty("language", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Language { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("instances", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Instance> Instances { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Instance
+    {
+        [Newtonsoft.Json.JsonProperty("start", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Start { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("end", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string End { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Transcript
+    {
+        [Newtonsoft.Json.JsonProperty("text", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Text { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("confidence", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double? Confidence { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("language", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Language { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -555,6 +595,9 @@ namespace indexer_api
     {
         [Newtonsoft.Json.JsonProperty("ocr", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<Ocr> Ocr { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("transcript", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Transcript> Transcript { get; set; }
 
     }
 
