@@ -49,7 +49,7 @@ public class IndexerService : IIndexerService
         foreach (var video in toMap)
         {
             video.Insights.Ocr = video.Insights.Ocr
-                //.Where(x => x.Confidence >= 0.96 && (x.Language == "da-DK" || x.Text.ToLower().IndexOfAny(new[] { 'æ', 'ø', 'å' }) > -1))
+                .Where(x => x.Confidence >= 0.96 && (x.Language == "da-DK" || x.Text.ToLower().IndexOfAny(new[] { 'æ', 'ø', 'å' }) > -1))
                 .OrderByDescending(x => x.Instances.Count).Take(50).ToList();
         }
         
