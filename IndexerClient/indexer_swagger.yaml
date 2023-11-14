@@ -121,6 +121,16 @@ paths:
           type: string
           required: true
           description: video url
+        - name: indexingPreset
+          in: query
+          type: string
+          required: false
+          description: indexing preset
+        - name: customLanguages
+          in: query
+          type: string
+          required: false
+          description: custom languages
       responses:
         200:
           description: Returns video index
@@ -148,7 +158,6 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/AccountInfo'
-
         
   Ocr:
     type: object
@@ -159,6 +168,28 @@ definitions:
         type: number
       language:
         type: string
+      instances:
+          type: array
+          items:
+              $ref: '#/definitions/Instance'
+
+  Instance:
+    type: object
+    properties:
+      start: 
+        type: string
+      end:
+          type: string
+  
+  Transcript:
+    type: object
+    properties:
+      text:
+        type: string
+      confidence:
+        type: number
+      language:
+        type: string      
   
   Insights:
     type: object
@@ -167,6 +198,10 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Ocr'
+      transcript:
+        type: array
+        items:
+          $ref: '#/definitions/Transcript'
     
   Video:
     type: object

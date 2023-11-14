@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net.Http.Json;
+using AutoMapper;
 using indexer_api;
 using Keywords.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,18 @@ public class IndexerService : IIndexerService
         {
             throw new Exception("No Indexer output found");
         }
+
+        if (toMap.Any(x => x.Insights?.Ocr == null))
+        {
+            return _mapper.Map<ICollection<Video>>(toMap);
+        }
+        
+        foreach (var video in toMap)
+        {
+            video.Insights.Ocr = video.Insights.Ocr
+                .Where(x => x.Confidence >= 0.96 && (x.Language == "da-DK" || x.Text.ToLower().IndexOfAny(new[] { 'æ', 'ø', 'å' }) > -1))
+                .OrderByDescending(x => x.Instances.Count).Take(50).ToList();
+        }
         
         return _mapper.Map<ICollection<Video>>(toMap);
     }
@@ -54,7 +67,8 @@ public class IndexerService : IIndexerService
 
         try
         {
-            var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id, accountInfo.AccessToken, videoName, url, description, "private", "partition");
+            var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
+                accountInfo.AccessToken, videoName, url, description, "private", "partition", "VideoOnly","en-US,da-DK");
             return _mapper.Map<RequestVideoIndexResponse>(response);
         }
         catch (ApiException<IndexInProgress> e)
