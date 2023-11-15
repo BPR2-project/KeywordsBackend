@@ -6,11 +6,13 @@ using Keywords.Mappers;
 using Keywords.Services;
 using Keywords.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using textToSpeech_api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // External services
 builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
+builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechClient(builder.Configuration["TextToSpeech:Url"]));
 
 var dbConnectionString = builder.Configuration.GetConnectionString("KeywordsDb");
 
@@ -24,6 +26,7 @@ builder.Services.AddScoped<IKeywordEntityRepository, KeywordEntityRepository>();
 // Services
 builder.Services.AddScoped<IKeywordService, KeywordService>();
 builder.Services.AddScoped<IIndexerService, IndexerService>();
+builder.Services.AddScoped<IAzureTextToSpeechService, AzureTextToSpeechService>();
 
 // Mapper
 builder.Services.AddAutoMapper(typeof(BaseProfile));
