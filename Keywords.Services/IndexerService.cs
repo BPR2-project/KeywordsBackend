@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using indexer_api;
 using Keywords.Services.Interfaces;
@@ -45,17 +47,60 @@ public class IndexerService : IIndexerService
         {
             return _mapper.Map<ICollection<Video>>(toMap);
         }
+
+        var ocr = toMap.SelectMany(video => video.Insights.Ocr, (_, t) => t.Text).ToList();
+        var ocrDoc = new { id = 1, text = string.Join(". ", ocr), language = "da" };
         
-        foreach (var video in toMap)
+        var request = new
         {
-            video.Insights.Ocr = video.Insights.Ocr
-                .Where(x => x.Confidence >= 0.96 && (x.Language == "da-DK" || x.Text.ToLower().IndexOfAny(new[] { 'æ', 'ø', 'å' }) > -1))
-                .OrderByDescending(x => x.Instances.Count).Take(50).ToList();
-        }
+            analysisInput = new { documents = new[] { ocrDoc } },
+            tasks = new[] { new { kind = "KeyPhraseExtraction", parameters = new { modelVersion = "latest" } } }
+        };
         
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "362e6105acc6405585aade0f4305e292");
+        var analyzeResult = await client.PostAsJsonAsync("https://languageresource123.cognitiveservices.azure.com/language/analyze-text/jobs?api-version=2022-05-01", request);
+        analyzeResult.EnsureSuccessStatusCode();
+        
+        var location = analyzeResult.Headers.FirstOrDefault(x => x.Key == "operation-location").Value?.FirstOrDefault();
+
+        var blackList = new [] {"modul", "lektion", "ord", "allan", "eksempel", "tror", "næste", "swap lang", "danmark"};
+
+        while (true)
+        {
+            var result = await client.GetAsync(location);
+            result.EnsureSuccessStatusCode();
+        
+            var json = await result.Content.ReadAsStringAsync();
+            var analyzeJobResult = JsonSerializer.Deserialize<AnalyzeJobResult>(json);
+            
+            if (analyzeJobResult?.status == "succeeded")
+            {
+                var keyPhrases = analyzeJobResult.tasks.items
+                    .SelectMany(x => x.results.documents.SelectMany(y => y.keyPhrases).ToList()).ToList();
+
+                File.WriteAllText("C:\\Users\\agosm\\Keywords discovery\\keyPhrases_from_ocr.json", JsonSerializer.Serialize(keyPhrases));
+
+                var topPhrases = keyPhrases.
+                    Where(x => !blackList.Contains(x.ToLower()))
+                    .OrderByDescending(x =>
+                        Regex.Matches(ocrDoc.text, x, RegexOptions.IgnoreCase).Count)
+                    .Take(15);
+
+                File.WriteAllText("C:\\Users\\agosm\\Keywords discovery\\topPhrases_from_ocr.json", JsonSerializer.Serialize(topPhrases));
+                break;
+            }
+        }
+       
         return _mapper.Map<ICollection<Video>>(toMap);
     }
 
+    record AnalyzeJobResult(string status, Tasks tasks);
+    record Tasks(Item[] items);
+    record Item(Results results);
+    record Results(Documents[] documents);
+    record Documents(string id, string[] keyPhrases);
+    
     public async Task<RequestVideoIndexResponse> IndexVideoAsync(string url, string videoName, string description)
     {
         var accountInfos = await _indexerClient.GetTokenAsync(_apiKey);

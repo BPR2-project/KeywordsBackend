@@ -158,7 +158,7 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/AccountInfo'
-        
+      
   Ocr:
     type: object
     properties: 
