@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,6 +21,10 @@
       <ProjectReference Include="..\Keywords.Extensions\Keywords.Extensions.csproj" />
       <ProjectReference Include="..\Keywords.Mappers\Keywords.Mappers.csproj" />
       <ProjectReference Include="..\Keywords.Services\Keywords.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="indexer_response.json" />
     </ItemGroup>
 
 </Project>

@@ -1,11 +1,16 @@
+using Azure.Core;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using indexer_api;
 using Keywords.Data;
 using Keywords.Data.Repositories;
 using Keywords.Data.Repositories.Interfaces;
+using Keywords.Extensions;
 using Keywords.Mappers;
 using Keywords.Services;
 using Keywords.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using textToSpeech_api;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +19,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
 builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechClient(builder.Configuration["TextToSpeech:Url"]));
 
-var dbConnectionString = builder.Configuration.GetConnectionString("KeywordsDb");
+var keyVaultUrl = new Uri(builder.Configuration["KeyVault:Url"]);
+var azureCredential = new DefaultAzureCredential();
+builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+
+var dbConnectionString = builder.Configuration.GetSection(KeyVault.VaultSecrets.keywordsdb.ToString()).Value;
 
 // Add services to the container.
 // Db Context

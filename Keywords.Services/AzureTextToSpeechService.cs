@@ -19,21 +19,18 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
 {
     private IKeywordEntityRepository _keywordEntityRepository;
     private IAzureTextToSpeechClient _azureTextToSpeechClient;
-    private KeyVault _keyVault;
     private string _subscriptionKey;
     private string _region;
     private string _blobConnection;
     private string _blobContainer;
 
     public AzureTextToSpeechService(IAzureTextToSpeechClient azureTextToSpeechClient,
-        IKeywordEntityRepository keywordEntityRepository)
+        IKeywordEntityRepository keywordEntityRepository, IConfiguration configuration)
     {
-        _keyVault = new KeyVault();
-
-        _blobConnection = _keyVault.GetSecret(KeyVault.VaultSecrets.blobstorageuri.ToString());
-        _blobContainer = _keyVault.GetSecret(KeyVault.VaultSecrets.blobcontainer.ToString());
-        _subscriptionKey = _keyVault.GetSecret(KeyVault.VaultSecrets.ttskey.ToString());
-        _region = _keyVault.GetSecret(KeyVault.VaultSecrets.ttsregion.ToString());
+        _blobConnection = configuration.GetSection(KeyVault.VaultSecrets.blobstorageuri.ToString()).Value;
+        _blobContainer = configuration.GetSection(KeyVault.VaultSecrets.blobcontainer.ToString()).Value;
+        _subscriptionKey = configuration.GetSection(KeyVault.VaultSecrets.ttskey.ToString()).Value;
+        _region = configuration.GetSection(KeyVault.VaultSecrets.ttsregion.ToString()).Value;
         _azureTextToSpeechClient = azureTextToSpeechClient;
         _keywordEntityRepository = keywordEntityRepository;
     }
