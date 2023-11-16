@@ -3,10 +3,12 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using AutoMapper;
 using indexer_api;
+using Keywords.Data;
+using Keywords.Data.Repositories.Interfaces;
 using Keywords.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
-using RequestVideoIndexResponse = Keywords.API.Swagger.Controllers.Generated.RequestVideoIndexResponse;
-using Video = Keywords.API.Swagger.Controllers.Generated.Video;
+using VideoIndexerResponse = Keywords.API.Swagger.Controllers.Generated.VideoIndexerResponse;
+
 
 namespace Keywords.Services;
 
@@ -16,17 +18,24 @@ public class IndexerService : IIndexerService
     private readonly string _apiKey;
     private readonly string _accountId;
     private readonly IMapper _mapper;
+    private readonly IIndexerEntityRepository _indexerEntityRepository;
 
-
-    public IndexerService(IIndexerClient indexerClient, IConfiguration configuration, IMapper mapper)
+    public IndexerService(IIndexerClient indexerClient, IConfiguration configuration, IMapper mapper, IIndexerEntityRepository indexerEntityRepository)
     {
         _indexerClient = indexerClient;
         _mapper = mapper;
+        _indexerEntityRepository = indexerEntityRepository;
         _apiKey = configuration["Indexer:ApiKey"];
         _accountId = configuration["Indexer:AccountId"];
     }
-    
-    public async Task<ICollection<Video>> GetIndexerOutputAsync(string videoId)
+
+    public Task<VideoIndexerResponse> GetIndexerOutputAsync(Guid videoId)
+    {
+        throw new NotImplementedException();
+    }
+
+/*
+    public async Task<VideoIndexerResponse> GetIndexerOutputAsync(Guid videoId)
     {
         var accountInfos = await _indexerClient.GetTokenAsync(_apiKey);
         
@@ -45,7 +54,7 @@ public class IndexerService : IIndexerService
 
         if (toMap.Any(x => x.Insights?.Ocr == null))
         {
-            return _mapper.Map<ICollection<Video>>(toMap);
+            return _mapper.Map<>(toMap);
         }
 
         var ocr = toMap.SelectMany(video => video.Insights.Ocr, (_, t) => t.Text).ToList();
@@ -100,8 +109,9 @@ public class IndexerService : IIndexerService
     record Item(Results results);
     record Results(Documents[] documents);
     record Documents(string id, string[] keyPhrases);
-    
-    public async Task<RequestVideoIndexResponse> IndexVideoAsync(string url, string videoName, string description)
+*/
+
+    public async Task IndexVideoAsync(Guid videoId, string url)
     {
         var accountInfos = await _indexerClient.GetTokenAsync(_apiKey);
         var accountInfo = accountInfos?.FirstOrDefault(x => x.Id == _accountId);
@@ -110,16 +120,16 @@ public class IndexerService : IIndexerService
             throw new Exception("No account found");
         }
 
-        try
+        var videoName = videoId.ToString();
+        var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
+            accountInfo.AccessToken, videoName, url, "description", "private", "partition", "VideoOnly","en-US,da-DK");
+      
+        if (response == null)
         {
-            var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
-                accountInfo.AccessToken, videoName, url, description, "private", "partition", "VideoOnly","en-US,da-DK");
-            return _mapper.Map<RequestVideoIndexResponse>(response);
+            throw new Exception("No Indexer output found");
         }
-        catch (ApiException<IndexInProgress> e)
-        {
-            return _mapper.Map<RequestVideoIndexResponse>(e.Result);
-        }
+        
+        _indexerEntityRepository.Insert(new IndexerEntity { VideoId = videoId, State = "Indexing", IndexerId = response.Id}, "service@email.com");
+        _indexerEntityRepository.Save();
     }
-
 }

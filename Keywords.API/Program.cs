@@ -20,6 +20,7 @@ builder.Services.AddDbContext<KeywordsContext>(opt => opt.UseSqlServer(dbConnect
 
 // Repositories
 builder.Services.AddScoped<IKeywordEntityRepository, KeywordEntityRepository>();
+builder.Services.AddScoped<IIndexerEntityRepository, IndexerEntityRepository>();
 
 // Services
 builder.Services.AddScoped<IKeywordService, KeywordService>();

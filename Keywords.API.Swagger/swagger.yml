@@ -80,26 +80,25 @@ paths:
             $ref: "#/definitions/Keyword"
         404:
           description: Keyword not found
-  /indexer:
+  /indexer/{videoId}:
     get:
       tags:
         - "indexer"
-      summary: "Get a ocr list of the indexed video"
-      description: "Get a ocr list of the indexed video"
-      operationId: "GetOcrList"
+      summary: "Get a keyword list of the indexed video"
+      description: "Get a keyword list of the indexed video"
+      operationId: "GetKeywordsFromIndexer"
       parameters:
         - name: videoId
-          in: query
+          in: path
           description: Video Id to get the video ocr for
           required: true
           type: string
+          format: guid
       responses:
         200:
           description: Ocr video found
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/Video"
+            $ref: "#/definitions/VideoIndexerResponse"
         404:
           description: Not found
     post:
@@ -109,26 +108,20 @@ paths:
       description: "Index a video"
       operationId: "IndexVideo"
       parameters:
+        - name: videoId
+          in: path
+          description: Video id to index
+          required: true
+          type: string
+          format: guid
         - name: url
           in: query
           description: Video url to index
           required: true
           type: string
-        - name: name
-          in: query
-          description: Video name to index
-          required: true
-          type: string
-        - name: description
-          in: query
-          description: Video description to index
-          required: true
-          type: string
       responses:
         200:
-          description: Video indexed
-          schema:
-              $ref: "#/definitions/RequestVideoIndexResponse"
+          description: Video index started
         404:
           description: Not found
 definitions: 
@@ -155,27 +148,6 @@ definitions:
       AudioLink:
         type: string
         description: Link to the keyword's audio
-  Ocr:
-    type: object
-    properties:
-      text:
-        type: string
-      confidence:
-        type: number
-      language:
-        type: string
-      instances:
-        type: array
-        items:
-          $ref: '#/definitions/Instance'
-          
-  Instance:
-    type: object
-    properties:
-      start:
-        type: string
-      end:
-        type: string
 
   PaginatedKeywordsRequest:
     type: object
@@ -210,58 +182,16 @@ definitions:
       TotalAmountOfPages:
         type: integer
         description: Total number of pages based on the specified size
-  Insights:
+  
+  VideoIndexerResponse:
     type: object
     properties:
-      ocr:
-        type: array
-        items:
-          $ref: '#/definitions/Ocr'  
-          
-  Video:
-    type: object
-    properties:
-      id:
-        type: string
       state:
         type: string
       processingProgress:
         type: string
-      insights:
-        $ref: '#/definitions/Insights'
-        
-  VideoIndexerResponse:
-    type: object
-    properties:
-      videos:
+      keywords:
         type: array
         items:
-          $ref: '#/definitions/Video'
-
-  IndexInProgress:
-    type: object
-    properties:
-      errorType:
-        type: string
-      message:
-        type: string
-
-  IndexVideoReceipt:
-    type: object
-    properties:
-      accountId:
-        type: string
-      id:
-        type: string
-      description:
-        type: string
-      state:
-        type: string
-
-  RequestVideoIndexResponse:
-    type: object
-    properties:
-      receipt:
-        $ref: '#/definitions/IndexVideoReceipt'
-      indexInProgress:
-        $ref: '#/definitions/IndexInProgress'
+          $ref: '#/definitions/Keyword'
+  
