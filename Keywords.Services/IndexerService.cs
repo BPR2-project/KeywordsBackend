@@ -109,8 +109,8 @@ public class IndexerService : IIndexerService
     record Item(Results results);
     record Results(Documents[] documents);
     record Documents(string id, string[] keyPhrases);
-*/
 
+*/
     public async Task IndexVideoAsync(Guid videoId, string url)
     {
         var accountInfos = await _indexerClient.GetTokenAsync(_apiKey);
@@ -122,14 +122,15 @@ public class IndexerService : IIndexerService
 
         var videoName = videoId.ToString();
         var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
-            accountInfo.AccessToken, videoName, url, "description", "private", "partition", "VideoOnly","en-US,da-DK");
+            accountInfo.AccessToken, videoName, url, "description", "private", "partition",
+            new[] { "Faces", "ObservedPeople", "Emotions", "Labels" }, "Default", "en-US,da-DK");
       
         if (response == null)
         {
             throw new Exception("No Indexer output found");
         }
         
-        _indexerEntityRepository.Insert(new IndexerEntity { VideoId = videoId, State = "Indexing", IndexerId = response.Id}, "service@email.com");
+        _indexerEntityRepository.Insert(new IndexerEntity { VideoId = videoId, State = "Indexing", IndexerId = response.Id}, "indexer.service@email.com");
         _indexerEntityRepository.Save();
     }
 }

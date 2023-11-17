@@ -121,6 +121,13 @@ paths:
           type: string
           required: true
           description: video url
+        - name: excludedAI
+          in: query
+          type: array
+          items: 
+            type: string          
+          required: false
+          description: excluded ai
         - name: indexingPreset
           in: query
           type: string

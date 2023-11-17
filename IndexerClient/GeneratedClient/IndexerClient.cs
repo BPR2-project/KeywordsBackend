@@ -56,11 +56,12 @@ namespace indexer_api
         /// <param name="description">video description</param>
         /// <param name="privacy">video privacy</param>
         /// <param name="partition">partition?</param>
+        /// <param name="excludedAI">excluded ai</param>
         /// <param name="indexingPreset">indexing preset</param>
         /// <param name="customLanguages">custom languages</param>
         /// <returns>Returns video index</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, System.Collections.Generic.IEnumerable<string> excludedAI = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -299,11 +300,12 @@ namespace indexer_api
         /// <param name="description">video description</param>
         /// <param name="privacy">video privacy</param>
         /// <param name="partition">partition?</param>
+        /// <param name="excludedAI">excluded ai</param>
         /// <param name="indexingPreset">indexing preset</param>
         /// <param name="customLanguages">custom languages</param>
         /// <returns>Returns video index</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, System.Collections.Generic.IEnumerable<string> excludedAI = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (location == null)
                 throw new System.ArgumentNullException("location");
@@ -338,6 +340,10 @@ namespace indexer_api
             if (partition != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("partition") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partition, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            if (excludedAI != null)
+            {
+                foreach (var item_ in excludedAI) { urlBuilder_.Append(System.Uri.EscapeDataString("excludedAI") + "=").Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append("&"); }
             }
             if (indexingPreset != null)
             {
