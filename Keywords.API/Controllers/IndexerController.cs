@@ -17,9 +17,15 @@ public class IndexerController : IndexerControllerBase
         _logger = logger;
     }
     
-    public override Task<ActionResult<VideoIndexerResponse>> GetKeywordsFromIndexer(Guid videoId)
+    public override async Task<ActionResult<IndexerResponse>> GetIndexerResponse(Guid videoId)
     {
-        throw new NotImplementedException();
+        var indexerOutput = await _indexerService.GetIndexerOutputAsync(videoId);
+        if (indexerOutput == null)
+        {
+            return NotFound();
+        }
+
+        return indexerOutput;
     }
 
     public override async Task<IActionResult> IndexVideo(Guid videoId, string url)

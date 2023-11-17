@@ -4,7 +4,7 @@
 ## Contents
 
 - [IndexerControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase')
-  - [GetKeywordsFromIndexer(videoId)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetKeywordsFromIndexer-System-Guid- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.GetKeywordsFromIndexer(System.Guid)')
+  - [GetIndexerResponse(videoId)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetIndexerResponse-System-Guid- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.GetIndexerResponse(System.Guid)')
   - [IndexVideo(videoId,url)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-Guid,System-String- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.IndexVideo(System.Guid,System.String)')
 - [Keyword](#T-Keywords-API-Swagger-Controllers-Generated-Keyword 'Keywords.API.Swagger.Controllers.Generated.Keyword')
   - [AudioLink](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-AudioLink 'Keywords.API.Swagger.Controllers.Generated.Keyword.AudioLink')
@@ -35,8 +35,8 @@
 
 Keywords.API.Swagger.Controllers.Generated
 
-<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetKeywordsFromIndexer-System-Guid-'></a>
-### GetKeywordsFromIndexer(videoId) `method`
+<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetIndexerResponse-System-Guid-'></a>
+### GetIndexerResponse(videoId) `method`
 
 ##### Summary
 

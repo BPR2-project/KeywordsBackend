@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Keywords.Data;
+﻿namespace Keywords.Data;
 
 public class KeywordEntity : BaseModel
 {

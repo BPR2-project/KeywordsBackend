@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // External services
 builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
+builder.Services.AddScoped<IKeyPhraseClient>(_ => new KeyPhraseClient(builder.Configuration["KeyPhrase:BaseUrl"]));
 
 var dbConnectionString = builder.Configuration.GetConnectionString("KeywordsDb");
 

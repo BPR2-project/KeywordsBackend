@@ -86,7 +86,7 @@ paths:
         - "indexer"
       summary: "Get a keyword list of the indexed video"
       description: "Get a keyword list of the indexed video"
-      operationId: "GetKeywordsFromIndexer"
+      operationId: "GetIndexerResponse"
       parameters:
         - name: videoId
           in: path
@@ -98,7 +98,7 @@ paths:
         200:
           description: Ocr video found
           schema:
-            $ref: "#/definitions/VideoIndexerResponse"
+            $ref: "#/definitions/IndexerResponse"
         404:
           description: Not found
     post:
@@ -183,11 +183,15 @@ definitions:
         type: integer
         description: Total number of pages based on the specified size
   
-  VideoIndexerResponse:
+  IndexerResponse:
     type: object
     properties:
       state:
         type: string
+        enum: [Indexing,
+               ExtractingKeyPhrases,
+               Failed,
+               Succeeded]
       processingProgress:
         type: string
       keywords:

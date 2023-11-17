@@ -4,6 +4,7 @@ using Keywords.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Keywords.Data.Migrations
 {
     [DbContext(typeof(KeywordsContext))]
-    partial class KeywordsContextModelSnapshot : ModelSnapshot
+    [Migration("20231117070347_Add Indexer State")]
+    partial class AddIndexerState
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,9 +47,6 @@ namespace Keywords.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("KeyPhraseJobId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("State")
                         .HasColumnType("int");
 
@@ -56,6 +55,9 @@ namespace Keywords.Data.Migrations
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("VideoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

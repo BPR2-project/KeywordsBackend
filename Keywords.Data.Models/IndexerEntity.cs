@@ -2,7 +2,7 @@
 
 public class IndexerEntity : BaseModel
 {
-    public Guid VideoId { get; set; }
-    public string State { get; set; }
+    public IndexerState State { get; set; }
     public string IndexerId { get; set; }
+    public string? KeyPhraseJobId { get; set; }
 }
