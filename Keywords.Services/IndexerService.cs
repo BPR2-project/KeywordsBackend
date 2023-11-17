@@ -16,7 +16,7 @@ public class IndexerService : IIndexerService
     private readonly IIndexerEntityRepository _indexerEntityRepository;
     private readonly IKeywordEntityRepository _keywordEntityRepository;
     private readonly IMapper _mapper;
-    
+
     private readonly string _indexerApiKey;
     private readonly string _indexerAccountId;
     private readonly string _keyPhraseApiKey;
@@ -30,7 +30,7 @@ public class IndexerService : IIndexerService
         _indexerEntityRepository = indexerEntityRepository;
         _keywordEntityRepository = keywordEntityRepository;
         _mapper = mapper;
-        
+
         _indexerApiKey = configuration["Indexer:ApiKey"];
         _indexerAccountId = configuration["Indexer:AccountId"];
         _keyPhraseApiKey = configuration["KeyPhrase:ApiKey"];
@@ -54,7 +54,7 @@ public class IndexerService : IIndexerService
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
+
         return _mapper.Map<IndexerResponse>(entity);
     }
 
@@ -83,7 +83,7 @@ public class IndexerService : IIndexerService
         var keyPhraseIntersection = transcriptKeyPhrases.OrderByDescending(trans =>
                 ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans, StringComparison.InvariantCultureIgnoreCase)))
             .Take(15).ToList();
-            
+
         var keywords = keyPhraseIntersection.Select(x => new KeywordEntity
         {
             Content = x,
@@ -91,14 +91,14 @@ public class IndexerService : IIndexerService
             Language = "da",
             AudioLink = ""
         }).ToList();
-        
+
         _keywordEntityRepository.InsertRange(keywords, "email");
         _keywordEntityRepository.Save();
-        
+
         entity.State = IndexerState.Succeeded;
         _indexerEntityRepository.Update(entity, "email");
         _indexerEntityRepository.Save();
-        
+
         return GetKeyWords(entity);
     }
 
@@ -109,15 +109,15 @@ public class IndexerService : IIndexerService
         {
             return _mapper.Map<IndexerResponse>(video);
         }
-        
+
         var job = await CreateJobRequest(video);
 
         entity.State = IndexerState.ExtractingKeyPhrases;
         entity.KeyPhraseJobId = job;
-        
+
         _indexerEntityRepository.Update(entity, "email");
         _indexerEntityRepository.Save();
-        
+
         return _mapper.Map<IndexerResponse>(entity);
     }
 
@@ -166,7 +166,8 @@ public class IndexerService : IIndexerService
     private async Task<Video> GetIndexerOutputAsync(IndexerEntity entity)
     {
         var accountInfo = await GetAccountInfoAsync();
-        var response = await _indexerClient.GetIndexerOutputAsync(accountInfo.Location, accountInfo.Id, entity.IndexerId,
+        var response = await _indexerClient.GetIndexerOutputAsync(accountInfo.Location, accountInfo.Id,
+            entity.IndexerId,
             accountInfo.AccessToken);
         var video = response?.Videos?.FirstOrDefault();
 
@@ -186,7 +187,7 @@ public class IndexerService : IIndexerService
         var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
             accountInfo.AccessToken, videoName, url, "description", "private", "partition",
             new[] { "Faces", "ObservedPeople", "Emotions", "Labels" }, "Default", "en-US,da-DK");
-      
+
         if (response == null)
         {
             throw new Exception("No Indexer output found");
@@ -197,7 +198,7 @@ public class IndexerService : IIndexerService
             "indexer.service@email.com");
         _indexerEntityRepository.Save();
     }
-    
+
     private async Task<AccountInfo> GetAccountInfoAsync()
     {
         var accountInfos = await _indexerClient.GetTokenAsync(_indexerApiKey);
@@ -205,12 +206,4 @@ public class IndexerService : IIndexerService
         var accountInfo = accountInfos?.FirstOrDefault(x => x.Id == _indexerAccountId);
         return accountInfo ?? throw new Exception("No account found");
     }
-
-    record AnalyzeJobResult(string status, Tasks tasks);
-    record Tasks(Item[] items);
-    record Item(Results results);
-    record Results(Documents[] documents);
-    record Documents(string id, string[] keyPhrases);
-
-
 }
