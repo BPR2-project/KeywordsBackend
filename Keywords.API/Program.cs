@@ -16,15 +16,16 @@ using textToSpeech_api;
 var builder = WebApplication.CreateBuilder(args);
 
 // Key Vault
-var keyVaultUrl = new Uri(builder.Configuration["KeyVault:Url"]);
-var azureCredential = new DefaultAzureCredential();
-builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+// var keyVaultUrl = new Uri(builder.Configuration["KeyVault:Url"]);
+// var azureCredential = new DefaultAzureCredential();
+// builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
 
 // External services
 builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
 builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechClient(builder.Configuration["TextToSpeech:Url"]));
 
-var dbConnectionString = builder.Configuration.GetSection(KeyVault.VaultSecrets.keywordsdb.ToString()).Value;
+// var dbConnectionString = builder.Configuration.GetSection(KeyVault.VaultSecrets.keywordsdb.ToString()).Value;
+var dbConnectionString = builder.Configuration.GetSection("DB_CONNECTION_STRING").Value;
 
 // Add services to the container.
 // Db Context
