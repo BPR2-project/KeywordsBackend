@@ -17,10 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Key Vault
 var keyVaultUrl = new Uri(builder.Configuration["KeyVault:Url"]);
-var azureCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions()
-{
-    ManagedIdentityClientId = "b59b5b30-8d3e-4306-a9b6-d21ad92febfa"
-});
+var azureCredential = new DefaultAzureCredential();
 builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
 
 // External services
