@@ -7,8 +7,6 @@ using Keywords.Data;
 using Keywords.Data.Repositories.Interfaces;
 using Keywords.Extensions;
 using Keywords.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using textToSpeech_api;
 using Microsoft.CognitiveServices.Speech;
