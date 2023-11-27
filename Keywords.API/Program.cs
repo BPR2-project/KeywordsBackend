@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
 builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechClient(builder.Configuration["TextToSpeech:Url"]));
 
-Console.WriteLine(builder.Configuration["Indexer:BaseUrl"]);
+Console.WriteLine("-------------- Does this work? --------------" + builder.Configuration["Indexer:BaseUrl"]);
 var dbConnectionString = builder.Configuration.GetConnectionString("KeywordsDb");
 
 // Add services to the container.
