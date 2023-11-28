@@ -7,8 +7,6 @@ using Keywords.Data;
 using Keywords.Data.Repositories.Interfaces;
 using Keywords.Extensions;
 using Keywords.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using textToSpeech_api;
 using Microsoft.CognitiveServices.Speech;
@@ -19,25 +17,25 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
 {
     private IKeywordEntityRepository _keywordEntityRepository;
     private IAzureTextToSpeechClient _azureTextToSpeechClient;
-    private string _subscriptionKey;
-    private string _region;
-    private string _blobConnection;
+    private string _ttsSubscriptionKey;
+    private string _ttsRegion;
+    private string _blobUri;
     private string _blobContainer;
 
     public AzureTextToSpeechService(IAzureTextToSpeechClient azureTextToSpeechClient,
         IKeywordEntityRepository keywordEntityRepository, IConfiguration configuration)
     {
-        _blobConnection = configuration.GetSection(KeyVault.VaultSecrets.blobstorageuri.ToString()).Value;
-        _blobContainer = configuration.GetSection(KeyVault.VaultSecrets.blobcontainer.ToString()).Value;
-        _subscriptionKey = configuration.GetSection(KeyVault.VaultSecrets.ttskey.ToString()).Value;
-        _region = configuration.GetSection(KeyVault.VaultSecrets.ttsregion.ToString()).Value;
+        _blobUri = configuration["BlobStorage:Uri"];
+        _blobContainer = configuration["BlobStorage:Container"];
+        _ttsSubscriptionKey = configuration["TextToSpeech:Key"];
+        _ttsRegion = configuration["Azure:Region"];
         _azureTextToSpeechClient = azureTextToSpeechClient;
         _keywordEntityRepository = keywordEntityRepository;
     }
     
     public async Task ConvertTextToSpeech(Guid videoId)
     {
-        var voicesList = await _azureTextToSpeechClient.GetAllVoicesAsync(_subscriptionKey);
+        var voicesList = await _azureTextToSpeechClient.GetAllVoicesAsync(_ttsSubscriptionKey);
 
         var videoKeywords = _keywordEntityRepository.GetAllKeywordsByVideoId(videoId, int.MaxValue, 0);
 
@@ -46,11 +44,11 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
 
         var keywordsLanguage = videoKeywords.keywords.First().Language;
 
-        var speechConfig = SpeechConfig.FromSubscription(_subscriptionKey, _region);
+        var speechConfig = SpeechConfig.FromSubscription(_ttsSubscriptionKey, _ttsRegion);
         speechConfig.SpeechSynthesisVoiceName = voicesList
             .First(a => a.Locale == keywordsLanguage && a.Gender == "Female").ShortName;
 
-        var containerClient = new BlobContainerClient(_blobConnection, _blobContainer);
+        var containerClient = new BlobContainerClient(_blobUri, _blobContainer);
 
         using (var synthesizer = new SpeechSynthesizer(speechConfig, null))
         {

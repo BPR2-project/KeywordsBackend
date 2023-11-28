@@ -1,6 +1,3 @@
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-
 namespace Keywords.Extensions;
 
 public class KeyVault
