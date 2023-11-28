@@ -53,6 +53,13 @@ public interface IRepository<TEntity> where TEntity : class
     void Insert(TEntity entity, string email);
 
     /// <summary>
+    ///    Inserts a range of entities
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="email"></param>
+    void InsertRange(IEnumerable<TEntity> entities, string email);
+
+    /// <summary>
     ///     Updates an entity
     /// </summary>
     /// <param name="entity">Entity to update</param>

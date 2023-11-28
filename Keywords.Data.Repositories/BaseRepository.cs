@@ -88,6 +88,21 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         DbSet.Add(entity);
     }
 
+    public virtual void InsertRange(IEnumerable<TEntity> entities, string email)
+    {
+        var entitiesToInsert = entities.Where(a => !DbSet.Any(b => b.Id == a.Id)).ToList();
+        
+        var now = DateTimeOffset.UtcNow;
+        
+        foreach (var entity in entitiesToInsert)
+        {
+            entity.CreatedAt = now;
+            entity.CreatedBy = email;
+        }
+
+        DbSet.AddRange(entitiesToInsert);
+    }
+    
     public virtual void Update(TEntity entity, string email)
     {
         DbSet.Attach(entity);

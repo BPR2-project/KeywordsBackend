@@ -10,4 +10,5 @@ public class KeywordsContext: DbContext
     }
     
     public DbSet<KeywordEntity> KeywordEntities { get; set; }
+    public DbSet<IndexerEntity> IndexerEntities { get; set; }
 }

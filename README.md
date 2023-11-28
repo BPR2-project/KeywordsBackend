@@ -4,8 +4,8 @@
 ## Contents
 
 - [IndexerControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase')
-  - [GetOcrList(videoId)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetOcrList-System-String- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.GetOcrList(System.String)')
-  - [IndexVideo(url,name,description)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-String,System-String,System-String- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.IndexVideo(System.String,System.String,System.String)')
+  - [GetIndexerResponse(videoId)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetIndexerResponse-System-Guid- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.GetIndexerResponse(System.Guid)')
+  - [IndexVideo(videoId,url)](#M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-Guid,System-String- 'Keywords.API.Swagger.Controllers.Generated.IndexerControllerBase.IndexVideo(System.Guid,System.String)')
 - [Keyword](#T-Keywords-API-Swagger-Controllers-Generated-Keyword 'Keywords.API.Swagger.Controllers.Generated.Keyword')
   - [AudioLink](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-AudioLink 'Keywords.API.Swagger.Controllers.Generated.Keyword.AudioLink')
   - [Content](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-Content 'Keywords.API.Swagger.Controllers.Generated.Keyword.Content')
@@ -35,12 +35,12 @@
 
 Keywords.API.Swagger.Controllers.Generated
 
-<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetOcrList-System-String-'></a>
-### GetOcrList(videoId) `method`
+<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-GetIndexerResponse-System-Guid-'></a>
+### GetIndexerResponse(videoId) `method`
 
 ##### Summary
 
-Get a ocr list of the indexed video
+Get a keyword list of the indexed video
 
 ##### Returns
 
@@ -50,14 +50,14 @@ Ocr video found
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| videoId | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video Id to get the video ocr for |
+| videoId | [System.Guid](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Guid 'System.Guid') | Video Id to get the video ocr for |
 
 ##### Remarks
 
-Get a ocr list of the indexed video
+Get a keyword list of the indexed video
 
-<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-String,System-String,System-String-'></a>
-### IndexVideo(url,name,description) `method`
+<a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-Guid,System-String-'></a>
+### IndexVideo(videoId,url) `method`
 
 ##### Summary
 
@@ -65,15 +65,14 @@ Index a video
 
 ##### Returns
 
-Video indexed
+Video index started
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
+| videoId | [System.Guid](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Guid 'System.Guid') | Video id to index |
 | url | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video url to index |
-| name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video name to index |
-| description | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Video description to index |
 
 ##### Remarks
 
