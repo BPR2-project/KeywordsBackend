@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using AutoMapper;
+﻿using AutoMapper;
 using indexer_api;
 using Keywords.API.Swagger.Controllers.Generated;
 using Keywords.Data;
@@ -82,7 +81,7 @@ public class IndexerService : IIndexerService
         var transcriptKeyPhrases = documents[1].KeyPhrases;
         var keyPhraseIntersection = transcriptKeyPhrases.OrderByDescending(trans =>
                 ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans, StringComparison.InvariantCultureIgnoreCase)))
-            .Take(15).ToList();
+            .Take(50).ToList();
 
         var keywords = keyPhraseIntersection.Select(x => new KeywordEntity
         {
@@ -137,8 +136,11 @@ public class IndexerService : IIndexerService
 
     private static KeyPhraseRequest CreateKeyPhraseRequest(Video video)
     {
-        var ocr = video.Insights.Ocr.OrderByDescending(x => x.Instances.Count)
-            .Take(50).Select(x => x.Text).ToList();
+        var ocr = video.Insights.Ocr
+            .Where(x => x.Confidence >= 0.96 &&
+                        (x.Language != "en-US" || x.Text.ToLower().IndexOfAny(new[] { 'æ', 'ø', 'å' }) > -1))
+            .OrderByDescending(x => x.Instances.Count).Select(x => x.Text).ToList();
+        
         var transcript = video.Insights.Transcript.Select(x => x.Text).ToList();
 
         var request = new KeyPhraseRequest
@@ -147,7 +149,7 @@ public class IndexerService : IIndexerService
             {
                 Documents = new[]
                 {
-                    new Document { Id = 1, Text = string.Join(". ", ocr), Language = "da" },
+                    new Document { Id = 1, Text = string.Join(" ", ocr), Language = "da" },
                     new Document { Id = 2, Text = string.Join(". ", transcript), Language = "da" }
                 }
             },
@@ -195,7 +197,7 @@ public class IndexerService : IIndexerService
 
         _indexerEntityRepository.Insert(
             new IndexerEntity { Id = videoId, State = IndexerState.Indexing, IndexerId = response.Id },
-            "indexer.service@email.com");
+            "email");
         _indexerEntityRepository.Save();
     }
 
