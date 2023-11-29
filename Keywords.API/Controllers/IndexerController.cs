@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Keywords.API.Controllers;
 
-[ApiController]
-[Route("[controller]")]
 public class IndexerController : IndexerControllerBase
 {
     private readonly IIndexerService _indexerService;
