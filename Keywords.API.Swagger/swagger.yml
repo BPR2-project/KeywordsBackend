@@ -131,6 +131,40 @@ paths:
               $ref: "#/definitions/RequestVideoIndexResponse"
         404:
           description: Not found
+  /speech:
+    post:
+      tags:
+        - "speech"
+      summary: "Create pronunciation assessment"
+      description: "Create a pronunciation assessment and receive assessment in response"
+      operationId: "CreatePronunciationAssessment"
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: language
+          in: query
+          description: Identifies the spoken language that's being recognized, for Danish use da-DK
+          required: true
+          type: string
+        - name: referenceText
+          in: query
+          description: Text of the pronounced word
+          required: true
+          type: string     
+        - name: file
+          in: formData
+          description: Uploaded audio file
+          required: true
+          type: file
+      responses:
+        100:
+          description: The initial request has been accepted. Proceed with sending the rest of the data.
+        200:
+          description: Pronunciation Assessment was created successfully
+          schema:
+            $ref: "#/definitions/PronunciationAssessmentResponseDTO"
+        400:
+          description: Bad request
 definitions: 
   Keyword:
     type: object
@@ -265,3 +299,41 @@ definitions:
         $ref: '#/definitions/IndexVideoReceipt'
       indexInProgress:
         $ref: '#/definitions/IndexInProgress'
+  
+  PronunciationAssessmentDTO:
+    type: object
+    properties:
+      Confidence:
+        type: number
+      Lexical:
+        type: string
+      ITN:
+        type: string
+      MaskedITN:
+        type: string
+      Display:
+        type: string
+      AccuracyScore:
+        type: number
+      FluencyScore:
+        type: number
+      CompletenessScore:
+        type: number
+      PronScore:
+        type: number
+  PronunciationAssessmentResponseDTO:
+    type: object
+    properties:
+      RecognitionStatus:
+        type: string
+      Offset:
+        type: string
+      Duration:
+        type: string
+      NBest:
+        type: array
+        description: Pronunciation assessment info
+        items:
+          $ref: '#/definitions/PronunciationAssessmentDTO'
+      DisplayText:
+        type: string

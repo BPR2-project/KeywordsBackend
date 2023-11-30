@@ -89,6 +89,25 @@ namespace Keywords.API.Swagger.Controllers.Generated
 
     }
 
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+
+    public abstract class SpeechControllerBase : Microsoft.AspNetCore.Mvc.Controller
+    {
+        /// <summary>
+        /// Create pronunciation assessment
+        /// </summary>
+        /// <remarks>
+        /// Create a pronunciation assessment and receive assessment in response
+        /// </remarks>
+        /// <param name="language">Identifies the spoken language that's being recognized, for Danish use da-DK</param>
+        /// <param name="referenceText">Text of the pronounced word</param>
+        /// <param name="file">Uploaded audio file</param>
+        /// <returns>Pronunciation Assessment was created successfully</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("speech")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<PronunciationAssessmentResponseDTO>> CreatePronunciationAssessment([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string language, [Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] string referenceText, [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] FileParameter file);
+
+    }
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Keyword
     {
@@ -429,6 +448,114 @@ namespace Keywords.API.Swagger.Controllers.Generated
 
         }
 
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PronunciationAssessmentDTO
+    {
+        [Newtonsoft.Json.JsonProperty("Confidence", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double? Confidence { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("Lexical", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Lexical { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("ITN", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ITN { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("MaskedITN", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string MaskedITN { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("Display", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Display { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("AccuracyScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double? AccuracyScore { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("FluencyScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double? FluencyScore { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("CompletenessScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double? CompletenessScore { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("PronScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double? PronScore { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static PronunciationAssessmentDTO FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<PronunciationAssessmentDTO>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PronunciationAssessmentResponseDTO
+    {
+        [Newtonsoft.Json.JsonProperty("RecognitionStatus", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RecognitionStatus { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("Offset", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Offset { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("Duration", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Duration { get; set; }
+
+        /// <summary>
+        /// Pronunciation assessment info
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("NBest", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.List<PronunciationAssessmentDTO> NBest { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("DisplayText", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string DisplayText { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static PronunciationAssessmentResponseDTO FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<PronunciationAssessmentResponseDTO>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FileParameter
+    {
+        public FileParameter(System.IO.Stream data)
+            : this (data, null, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName)
+            : this (data, fileName, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName, string contentType)
+        {
+            Data = data;
+            FileName = fileName;
+            ContentType = contentType;
+        }
+
+        public System.IO.Stream Data { get; private set; }
+
+        public string FileName { get; private set; }
+
+        public string ContentType { get; private set; }
     }
 
 

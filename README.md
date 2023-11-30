@@ -27,6 +27,10 @@
   - [SizeRequested](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsResponse-SizeRequested 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.SizeRequested')
   - [TotalAmount](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsResponse-TotalAmount 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.TotalAmount')
   - [TotalAmountOfPages](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsResponse-TotalAmountOfPages 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.TotalAmountOfPages')
+- [PronunciationAssessmentResponseDTO](#T-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO 'Keywords.API.Swagger.Controllers.Generated.PronunciationAssessmentResponseDTO')
+  - [NBest](#P-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO-NBest 'Keywords.API.Swagger.Controllers.Generated.PronunciationAssessmentResponseDTO.NBest')
+- [SpeechControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase')
+  - [CreatePronunciationAssessment(language,referenceText,file)](#M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-System-String,System-String,Keywords-API-Swagger-Controllers-Generated-FileParameter- 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase.CreatePronunciationAssessment(System.String,System.String,Keywords.API.Swagger.Controllers.Generated.FileParameter)')
 
 <a name='T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase'></a>
 ## IndexerControllerBase `type`
@@ -268,3 +272,47 @@ Total number of keywords retrieved
 ##### Summary
 
 Total number of pages based on the specified size
+
+<a name='T-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO'></a>
+## PronunciationAssessmentResponseDTO `type`
+
+##### Namespace
+
+Keywords.API.Swagger.Controllers.Generated
+
+<a name='P-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO-NBest'></a>
+### NBest `property`
+
+##### Summary
+
+Pronunciation assessment info
+
+<a name='T-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase'></a>
+## SpeechControllerBase `type`
+
+##### Namespace
+
+Keywords.API.Swagger.Controllers.Generated
+
+<a name='M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-System-String,System-String,Keywords-API-Swagger-Controllers-Generated-FileParameter-'></a>
+### CreatePronunciationAssessment(language,referenceText,file) `method`
+
+##### Summary
+
+Create pronunciation assessment
+
+##### Returns
+
+Pronunciation Assessment was created successfully
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| language | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Identifies the spoken language that's being recognized, for Danish use da-DK |
+| referenceText | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Text of the pronounced word |
+| file | [Keywords.API.Swagger.Controllers.Generated.FileParameter](#T-Keywords-API-Swagger-Controllers-Generated-FileParameter 'Keywords.API.Swagger.Controllers.Generated.FileParameter') | Uploaded audio file |
+
+##### Remarks
+
+Create a pronunciation assessment and receive assessment in response

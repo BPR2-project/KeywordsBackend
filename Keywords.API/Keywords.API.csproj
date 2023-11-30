@@ -21,6 +21,7 @@
       <ProjectReference Include="..\Keywords.Extensions\Keywords.Extensions.csproj" />
       <ProjectReference Include="..\Keywords.Mappers\Keywords.Mappers.csproj" />
       <ProjectReference Include="..\Keywords.Services\Keywords.Services.csproj" />
+      <ProjectReference Include="..\SpeechToText\SpeechToText.csproj" />
     </ItemGroup>
 
     <ItemGroup>

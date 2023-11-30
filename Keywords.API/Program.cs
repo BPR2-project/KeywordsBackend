@@ -6,6 +6,7 @@ using Keywords.Mappers;
 using Keywords.Services;
 using Keywords.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using speechToText_api;
 using textToSpeech_api;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // External services
 builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
 builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechClient(builder.Configuration["TextToSpeech:Url"]));
+builder.Services.AddScoped<IAzureSpeechToTextClient>(_ => new AzureSpeechToTextClient(builder.Configuration["SpeechToText:Url"]));
 
 Console.WriteLine("-------------- Does this work? --------------" + builder.Configuration["Indexer:BaseUrl"]);
 var dbConnectionString = builder.Configuration.GetConnectionString("KeywordsDb");
@@ -28,6 +30,7 @@ builder.Services.AddScoped<IKeywordEntityRepository, KeywordEntityRepository>();
 builder.Services.AddScoped<IKeywordService, KeywordService>();
 builder.Services.AddScoped<IIndexerService, IndexerService>();
 builder.Services.AddScoped<IAzureTextToSpeechService, AzureTextToSpeechService>();
+builder.Services.AddScoped<IAzureSpeechToTextService, AzureSpeechToTextService>();
 
 // Mapper
 builder.Services.AddAutoMapper(typeof(BaseProfile));
@@ -42,8 +45,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwagger(p => p.SerializeAsV2 = true);
+    app.UseSwaggerUI(c => {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SwaggerDemoApplication V1");
+    });
 }
 
 app.UseHttpsRedirection();
