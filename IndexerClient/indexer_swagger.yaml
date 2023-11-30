@@ -101,21 +101,21 @@ paths:
           type: string
           required: true
           description: video name
-        - name: description
-          in: query
-          type: string
-          required: false
-          description: video description
         - name: privacy
           in: query
           type: string
           required: false
           description: video privacy
-        - name: partition
+        - name: language
           in: query
           type: string
           required: false
-          description: partition?
+          description: language
+        - name: sourceLanguages
+          in: query
+          type: string
+          required: false
+          description: source languages
         - name: videoUrl
           in: query
           type: string
@@ -128,16 +128,6 @@ paths:
             type: string          
           required: false
           description: excluded ai
-        - name: indexingPreset
-          in: query
-          type: string
-          required: false
-          description: indexing preset
-        - name: customLanguages
-          in: query
-          type: string
-          required: false
-          description: custom languages
       responses:
         200:
           description: Returns video index
