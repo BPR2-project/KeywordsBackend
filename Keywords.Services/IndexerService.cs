@@ -136,12 +136,8 @@ public class IndexerService : IIndexerService
 
     private static KeyPhraseRequest CreateKeyPhraseRequest(Video video)
     {
-        var ocr = video.Insights.Ocr
-            .Where(x => x.Confidence >= 0.96 &&
-                        (x.Language != "en-US" || x.Text.ToLower().IndexOfAny(new[] { 'æ', 'ø', 'å' }) > -1))
-            .OrderByDescending(x => x.Instances.Count).Select(x => x.Text).ToList();
-        
-        var transcript = video.Insights.Transcript.Select(x => x.Text).ToList();
+        var ocr = video.Insights.Ocr.Select(x => x.Text);
+        var transcript = video.Insights.Transcript.Select(x => x.Text);
 
         var request = new KeyPhraseRequest
         {
