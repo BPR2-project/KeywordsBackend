@@ -91,7 +91,7 @@ public class IndexerService : IIndexerService
         {
             Content = x,
             VideoId = entity.Id,
-            Language = "da",
+            Language = "da-DK",
             AudioLink = ""
         }).ToList();
 
