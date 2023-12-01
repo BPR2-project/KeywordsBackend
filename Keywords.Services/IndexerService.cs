@@ -1,10 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using System.Net.Http.Json;
+using System.Web;
+using AutoMapper;
 using indexer_api;
 using Keywords.API.Swagger.Controllers.Generated;
 using Keywords.Data;
 using Keywords.Data.Repositories.Interfaces;
 using Keywords.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Keywords.Services;
 
@@ -183,8 +187,8 @@ public class IndexerService : IIndexerService
 
         var videoName = videoId.ToString();
         var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
-            accountInfo.AccessToken, videoName, url, "description", "private", "partition",
-            new[] { "Faces", "ObservedPeople", "Emotions", "Labels" }, "Default", "en-US,da-DK");
+            accountInfo.AccessToken, videoName, url, "private", "da-DK", "da-DK",
+            new[] { "Faces", "ObservedPeople", "Emotions", "Labels" });
 
         if (response == null)
         {
