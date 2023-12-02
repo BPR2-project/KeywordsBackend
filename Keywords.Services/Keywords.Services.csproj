@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\IndexerClient\IndexerClient.csproj" />
+      <ProjectReference Include="..\KeyPhraseClient\KeyPhraseClient.csproj" />
       <ProjectReference Include="..\Keywords.API.Swagger\Keywords.API.Swagger.csproj" />
       <ProjectReference Include="..\Keywords.Data.Repositories\Keywords.Data.Repositories.csproj" />
       <ProjectReference Include="..\Keywords.Extensions\Keywords.Extensions.csproj" />

@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\KeyPhraseClient\KeyPhraseClient.csproj" />
       <ProjectReference Include="..\Keywords.API.Swagger\Keywords.API.Swagger.csproj" />
       <ProjectReference Include="..\Keywords.Extensions\Keywords.Extensions.csproj" />
       <ProjectReference Include="..\Keywords.Mappers\Keywords.Mappers.csproj" />

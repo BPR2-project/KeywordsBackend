@@ -101,36 +101,33 @@ paths:
           type: string
           required: true
           description: video name
-        - name: description
-          in: query
-          type: string
-          required: false
-          description: video description
         - name: privacy
           in: query
           type: string
           required: false
           description: video privacy
-        - name: partition
+        - name: language
           in: query
           type: string
           required: false
-          description: partition?
+          description: language
+        - name: sourceLanguages
+          in: query
+          type: string
+          required: false
+          description: source languages
         - name: videoUrl
           in: query
           type: string
           required: true
           description: video url
-        - name: indexingPreset
+        - name: excludedAI
           in: query
-          type: string
+          type: array
+          items: 
+            type: string          
           required: false
-          description: indexing preset
-        - name: customLanguages
-          in: query
-          type: string
-          required: false
-          description: custom languages
+          description: excluded ai
       responses:
         200:
           description: Returns video index
@@ -158,7 +155,7 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/AccountInfo'
-        
+      
   Ocr:
     type: object
     properties: 

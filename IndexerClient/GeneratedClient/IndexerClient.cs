@@ -53,14 +53,13 @@ namespace indexer_api
         /// <param name="accessToken">accessToken</param>
         /// <param name="name">video name</param>
         /// <param name="videoUrl">video url</param>
-        /// <param name="description">video description</param>
         /// <param name="privacy">video privacy</param>
-        /// <param name="partition">partition?</param>
-        /// <param name="indexingPreset">indexing preset</param>
-        /// <param name="customLanguages">custom languages</param>
+        /// <param name="language">language</param>
+        /// <param name="sourceLanguages">source languages</param>
+        /// <param name="excludedAI">excluded ai</param>
         /// <returns>Returns video index</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string privacy = null, string language = null, string sourceLanguages = null, System.Collections.Generic.IEnumerable<string> excludedAI = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -296,14 +295,13 @@ namespace indexer_api
         /// <param name="accessToken">accessToken</param>
         /// <param name="name">video name</param>
         /// <param name="videoUrl">video url</param>
-        /// <param name="description">video description</param>
         /// <param name="privacy">video privacy</param>
-        /// <param name="partition">partition?</param>
-        /// <param name="indexingPreset">indexing preset</param>
-        /// <param name="customLanguages">custom languages</param>
+        /// <param name="language">language</param>
+        /// <param name="sourceLanguages">source languages</param>
+        /// <param name="excludedAI">excluded ai</param>
         /// <returns>Returns video index</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string description = null, string privacy = null, string partition = null, string indexingPreset = null, string customLanguages = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<IndexVideoReceipt> IndexVideoAsync(string location, string accountId, string accessToken, string name, string videoUrl, string privacy = null, string language = null, string sourceLanguages = null, System.Collections.Generic.IEnumerable<string> excludedAI = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (location == null)
                 throw new System.ArgumentNullException("location");
@@ -327,25 +325,21 @@ namespace indexer_api
             urlBuilder_.Append(System.Uri.EscapeDataString("accessToken") + "=").Append(System.Uri.EscapeDataString(ConvertToString(accessToken, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Append(System.Uri.EscapeDataString("videoUrl") + "=").Append(System.Uri.EscapeDataString(ConvertToString(videoUrl, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            if (description != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
             if (privacy != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("privacy") + "=").Append(System.Uri.EscapeDataString(ConvertToString(privacy, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partition != null)
+            if (language != null)
             {
-                urlBuilder_.Append(System.Uri.EscapeDataString("partition") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partition, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("language") + "=").Append(System.Uri.EscapeDataString(ConvertToString(language, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (indexingPreset != null)
+            if (sourceLanguages != null)
             {
-                urlBuilder_.Append(System.Uri.EscapeDataString("indexingPreset") + "=").Append(System.Uri.EscapeDataString(ConvertToString(indexingPreset, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("sourceLanguages") + "=").Append(System.Uri.EscapeDataString(ConvertToString(sourceLanguages, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (customLanguages != null)
+            if (excludedAI != null)
             {
-                urlBuilder_.Append(System.Uri.EscapeDataString("customLanguages") + "=").Append(System.Uri.EscapeDataString(ConvertToString(customLanguages, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                foreach (var item_ in excludedAI) { urlBuilder_.Append(System.Uri.EscapeDataString("excludedAI") + "=").Append(System.Uri.EscapeDataString(ConvertToString(item_, System.Globalization.CultureInfo.InvariantCulture))).Append("&"); }
             }
             urlBuilder_.Length--;
 

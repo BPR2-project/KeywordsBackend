@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using indexer_api;
 using Keywords.API.Swagger.Controllers.Generated;
+using Keywords.Data;
 
 namespace Keywords.Mappers;
 
@@ -7,15 +9,15 @@ public class IndexerMapper: Profile
 {
     public IndexerMapper()
     {
-        CreateMap<indexer_api.Video, Video>();
-        CreateMap<indexer_api.IndexVideoReceipt, RequestVideoIndexResponse>()
-            .ForMember(a => a.Receipt, opt => opt.MapFrom(a => a));
-        CreateMap<indexer_api.IndexInProgress, RequestVideoIndexResponse>()
-            .ForMember(a => a.IndexInProgress, opt => opt.MapFrom(a => a));
-        CreateMap<indexer_api.IndexVideoReceipt, IndexVideoReceipt>();
-        CreateMap<indexer_api.IndexInProgress, IndexInProgress>();
-        CreateMap<indexer_api.Insights, Insights>();
-        CreateMap<indexer_api.Ocr, Ocr>();
-        CreateMap<indexer_api.Instance, Instance>();
+        CreateMap<Video, IndexerResponse>()
+            .ForMember(a => a.State,
+                opt => opt.MapFrom(a => IndexerState.Indexing));
+        CreateMap<IEnumerable<KeywordEntity>, IndexerResponse>()
+            .ForMember(a => a.State,
+                opt => opt.MapFrom(a => IndexerState.Succeeded))
+            .ForMember(a => a.Keywords,
+            opt => opt.MapFrom(a => a));
+        CreateMap<IndexerEntity, IndexerResponse>();
+        CreateMap<KeywordEntity, Keyword>();
     }
 }

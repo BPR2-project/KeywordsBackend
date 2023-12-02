@@ -84,29 +84,29 @@ paths:
                 $ref: "#/components/schemas/Keyword"
         404:
           description: Keyword not found
-  /indexer:
+  /indexer/{videoId}:
     get:
       tags:
         - "indexer"
-      summary: "Get a ocr list of the indexed video"
-      description: "Get a ocr list of the indexed video"
-      operationId: "GetOcrList"
+      summary: "Get a keyword list of the indexed video"
+      description: "Get a keyword list of the indexed video"
+      operationId: "GetIndexerResponse"
       parameters:
         - name: videoId
-          in: query
+          in: path
           description: Video Id to get the video ocr for
           required: true
           schema: 
             type: string
+          format: guid
       responses:
         200:
           description: Ocr video found
           content: 
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Video"
+                
+                  $ref: "#/components/schemas/IndexerResponse"
         404:
           description: Not found
     post:
@@ -116,31 +116,22 @@ paths:
       description: "Index a video"
       operationId: "IndexVideo"
       parameters:
+        - name: videoId
+          in: path
+          description: Video id to index
+          required: true
+          schema: 
+            type: string
+          format: guid
         - name: url
           in: query
           description: Video url to index
           required: true
           schema: 
             type: string
-        - name: name
-          in: query
-          description: Video name to index
-          required: true
-          schema: 
-            type: string
-        - name: description
-          in: query
-          description: Video description to index
-          required: true
-          schema: 
-            type: string
       responses:
         200:
-          description: Video indexed
-          content: 
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RequestVideoIndexResponse"
+          description: Video index started
         404:
           description: Not found
   /speech:
@@ -205,28 +196,6 @@ components:
         AudioLink:
           type: string
           description: Link to the keyword's audio
-    Ocr:
-      type: object
-      properties:
-        text:
-          type: string
-        confidence:
-          type: number
-        language:
-          type: string
-        instances:
-          type: array
-          items:
-            $ref: '#/components/schemas/Instance'
-            
-    Instance:
-      type: object
-      properties:
-        start:
-          type: string
-        end:
-          type: string
-  
     PaginatedKeywordsRequest:
       type: object
       properties:
@@ -260,62 +229,6 @@ components:
         TotalAmountOfPages:
           type: integer
           description: Total number of pages based on the specified size
-    Insights:
-      type: object
-      properties:
-        ocr:
-          type: array
-          items:
-            $ref: '#/components/schemas/Ocr'  
-            
-    Video:
-      type: object
-      properties:
-        id:
-          type: string
-        state:
-          type: string
-        processingProgress:
-          type: string
-        insights:
-          $ref: '#/components/schemas/Insights'
-          
-    VideoIndexerResponse:
-      type: object
-      properties:
-        videos:
-          type: array
-          items:
-            $ref: '#/components/schemas/Video'
-  
-    IndexInProgress:
-      type: object
-      properties:
-        errorType:
-          type: string
-        message:
-          type: string
-  
-    IndexVideoReceipt:
-      type: object
-      properties:
-        accountId:
-          type: string
-        id:
-          type: string
-        description:
-          type: string
-        state:
-          type: string
-  
-    RequestVideoIndexResponse:
-      type: object
-      properties:
-        receipt:
-          $ref: '#/components/schemas/IndexVideoReceipt'
-        indexInProgress:
-          $ref: '#/components/schemas/IndexInProgress'
-    
     PronunciationAssessmentDTO:
       type: object
       properties:
@@ -353,6 +266,18 @@ components:
             $ref: '#/components/schemas/PronunciationAssessmentDTO'
         DisplayText:
           type: string
-    AudioFile:
-      type: string
-      format: binary
+    IndexerResponse:
+      type: object
+      properties:
+        state:
+          type: string
+          enum: [ Indexing,
+                  ExtractingKeyPhrases,
+                  Failed,
+                  Succeeded ]
+        processingProgress:
+          type: string
+        keywords:
+          type: array
+          items:
+            $ref: '#/definitions/Keyword'

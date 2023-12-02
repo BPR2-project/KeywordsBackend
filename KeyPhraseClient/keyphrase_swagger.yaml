@@ -1,0 +1,136 @@
+swagger: "2.0"
+info:
+  description: "Client responsible to call Azure Key Phrase Extraction Service."
+  version: "1.0.0"
+  title: "Key Phrase Client"
+host: "cognitiveservices.azure.com"
+tags:
+  - name: Key Phrase client
+    description: Everything that goes with Key Phrase Extraction
+
+produces:
+  - "application/json"
+schemes:
+  - "https"
+paths:
+  '/language/analyze-text/jobs?api-version=2022-05-01':
+    post:
+      tags:
+        - keyPhrase
+      operationId: CreateJob
+      description: Creates a job that extracts key phrases from input documents.
+      parameters:
+        - name: Ocp-Apim-Subscription-Key
+          in: header
+          type: string
+          required: true
+          description: api key
+        - name: request
+          in: body
+          description: Request body
+          required: true
+          schema:
+            $ref: "#/definitions/KeyPhraseRequest"
+      responses:
+        202:
+          description: Tasks accepted for processing
+          headers: 
+            operation-location:
+              type: string
+              description: The URL to retrieve the operation status.
+        401:
+          description: Unauthorized
+          
+  '/language/analyze-text/jobs/{jobId}?api-version=2022-05-01':
+    get:
+      tags:
+        - keyPhrase
+      operationId: GetJobResult
+      description: Gets the result of the key phrase extraction job.
+      parameters:
+        - name: Ocp-Apim-Subscription-Key
+          in: header
+          type: string
+          required: true
+          description: api key
+        - name: jobId
+          in: path
+          type: string
+          required: true
+          description: job id
+      responses:
+        200:
+          description: Returns the result of the key phrase extraction job.
+          schema:
+            $ref: "#/definitions/JobResult"
+        401:
+          description: Unauthorized
+        404:
+          description: Job not found
+   
+definitions:
+  KeyPhraseRequest:
+    type: object
+    properties:
+      tasks:
+        type: array
+        items:
+          $ref: "#/definitions/JobTask"
+      analysisInput:
+        type: object
+        properties:
+          documents:
+            type: array
+            items:
+              $ref: "#/definitions/Document"              
+
+  JobTask:
+    type: object
+    properties:
+      kind:
+        type: string
+        enum: [ KeyPhraseExtraction ]
+      parameters:
+        type: object
+        properties:
+          modelVersion:
+            type: string
+            enum: [ latest ]
+
+  Document:
+    type: object
+    properties:
+      id:
+        type: integer
+      text:
+        type: string
+      language:
+        type: string
+  
+  JobResult:
+    type: object
+    properties:
+      status:
+        type: string
+      tasks:
+        type: object
+        properties:
+          items:
+            type: array
+            items:
+              type: object
+              properties:
+                results:
+                  type: object
+                  properties:
+                    documents:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          keyPhrases:
+                            type: array
+                            items:
+                              type: string

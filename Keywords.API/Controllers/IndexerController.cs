@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Keywords.API.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class IndexerController : ControllerBase
+public class IndexerController : IndexerControllerBase
 {
     private readonly IIndexerService _indexerService;
     private readonly ILogger<IndexerController> _logger;
@@ -16,16 +14,21 @@ public class IndexerController : ControllerBase
         _indexerService = indexerService;
         _logger = logger;
     }
-
-    [HttpGet("GetIndexerOutput")]
-    public Task<ICollection<Video>> GetIndexerOutput(string videoId)
-    {
-        return _indexerService.GetIndexerOutputAsync(videoId);
-    }
     
-    [HttpPost( "IndexVideo")]
-    public Task<RequestVideoIndexResponse> IndexVideo(string url, string videoName, string description)
+    public override async Task<ActionResult<IndexerResponse>> GetIndexerResponse(Guid videoId)
     {
-        return _indexerService.IndexVideoAsync(url, videoName, description);
+        var indexerOutput = await _indexerService.GetIndexerOutputAsync(videoId);
+        if (indexerOutput == null)
+        {
+            return NotFound();
+        }
+
+        return indexerOutput;
+    }
+
+    public override async Task<IActionResult> IndexVideo(Guid videoId, string url)
+    {
+        await _indexerService.IndexVideoAsync(videoId, url);
+        return Ok();
     }
 }
