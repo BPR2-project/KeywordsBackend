@@ -15,6 +15,7 @@
       <ProjectReference Include="..\IndexerClient\IndexerClient.csproj" />
       <ProjectReference Include="..\Keywords.API.Swagger\Keywords.API.Swagger.csproj" />
       <ProjectReference Include="..\Keywords.Data.Models\Keywords.Data.Models.csproj" />
+        <ProjectReference Include="..\SpeechToText\SpeechToText.csproj" />
     </ItemGroup>
 
 </Project>

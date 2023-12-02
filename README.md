@@ -14,7 +14,7 @@
   - [Language](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-Language 'Keywords.API.Swagger.Controllers.Generated.Keyword.Language')
   - [VideoId](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-VideoId 'Keywords.API.Swagger.Controllers.Generated.Keyword.VideoId')
 - [KeywordControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase')
-  - [GetAllKeywordsByVideoId(paginatedKeywordsRequest)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetAllKeywordsByVideoId-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetAllKeywordsByVideoId(Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest)')
+  - [GetAllKeywordsByVideoId(body)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetAllKeywordsByVideoId-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetAllKeywordsByVideoId(Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest)')
   - [GetKeyword(keywordId)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetKeyword-System-Guid- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetKeyword(System.Guid)')
   - [PublishKeyword(keywordId,toBePublished)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-PublishKeyword-System-Guid,System-Nullable{System-Boolean}- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.PublishKeyword(System.Guid,System.Nullable{System.Boolean})')
 - [PaginatedKeywordsRequest](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest')
@@ -27,6 +27,10 @@
   - [SizeRequested](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsResponse-SizeRequested 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.SizeRequested')
   - [TotalAmount](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsResponse-TotalAmount 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.TotalAmount')
   - [TotalAmountOfPages](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsResponse-TotalAmountOfPages 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse.TotalAmountOfPages')
+- [PronunciationAssessmentResponseDTO](#T-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO 'Keywords.API.Swagger.Controllers.Generated.PronunciationAssessmentResponseDTO')
+  - [NBest](#P-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO-NBest 'Keywords.API.Swagger.Controllers.Generated.PronunciationAssessmentResponseDTO.NBest')
+- [SpeechControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase')
+  - [CreatePronunciationAssessment(language,referenceText)](#M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-Microsoft-AspNetCore-Http-IFormFile,System-String,System-String- 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase.CreatePronunciationAssessment(Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)')
 
 <a name='T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase'></a>
 ## IndexerControllerBase `type`
@@ -135,7 +139,7 @@ Id of the video that the keyword belongs to
 Keywords.API.Swagger.Controllers.Generated
 
 <a name='M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetAllKeywordsByVideoId-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-'></a>
-### GetAllKeywordsByVideoId(paginatedKeywordsRequest) `method`
+### GetAllKeywordsByVideoId(body) `method`
 
 ##### Summary
 
@@ -149,7 +153,7 @@ Returns all keywords paginated
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| paginatedKeywordsRequest | [Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest') | Contains pagination details |
+| body | [Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest') | Contains pagination details |
 
 ##### Remarks
 
@@ -267,3 +271,46 @@ Total number of keywords retrieved
 ##### Summary
 
 Total number of pages based on the specified size
+
+<a name='T-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO'></a>
+## PronunciationAssessmentResponseDTO `type`
+
+##### Namespace
+
+Keywords.API.Swagger.Controllers.Generated
+
+<a name='P-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO-NBest'></a>
+### NBest `property`
+
+##### Summary
+
+Pronunciation assessment info
+
+<a name='T-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase'></a>
+## SpeechControllerBase `type`
+
+##### Namespace
+
+Keywords.API.Swagger.Controllers.Generated
+
+<a name='M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-Microsoft-AspNetCore-Http-IFormFile,System-String,System-String-'></a>
+### CreatePronunciationAssessment(language,referenceText) `method`
+
+##### Summary
+
+Create pronunciation assessment
+
+##### Returns
+
+Pronunciation Assessment was created successfully
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| language | [Microsoft.AspNetCore.Http.IFormFile](#T-Microsoft-AspNetCore-Http-IFormFile 'Microsoft.AspNetCore.Http.IFormFile') | Identifies the spoken language that's being recognized, for Danish use da-DK |
+| referenceText | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Text of the pronounced word |
+
+##### Remarks
+
+Create a pronunciation assessment and receive assessment in response

@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  description: "Service responsible for handling speech to text calls."
+  version: "1.0.0"
+  title: "AzureSpeechToTextService"
+servers:
+  - url: https://northeurope.stt.speech.microsoft.com
+tags:
+  - name: "AzureSpeechToText"
+    description: "Handles the speech to text call to the azure service"
+paths:
+  /speech/recognition/conversation/cognitiveservices/v1:
+    post:
+      tags:
+        - "AzureSpeechToText"
+      summary: "Create pronunciation assessment"
+      description: "Create a pronunciation assessment and receive assessment in response"
+      operationId: "CreatePronunciationAssessment"
+      requestBody:
+        content:
+          audio/wav:
+            schema:
+              type: string
+              format: binary
+      parameters:
+        - name: language
+          in: query
+          description: Identifies the spoken language that's being recognized, for Danish use da-DK
+          required: true
+          schema:
+            type: string
+        - name: Ocp-Apim-Subscription-Key
+          in: header
+          description: Authorization header
+          required: true
+          schema:
+            type: string
+        - name: Pronunciation-Assessment
+          in: header
+          description: Pronunciation assessment parameters
+          required: true
+          schema:
+            type: string
+      responses:
+        100:
+          description: The initial request has been accepted. Proceed with sending the rest of the data.
+        200:
+          description: Pronunciation Assessment was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PronunciationAssessmentResponse"
+        400:
+          description: Bad request
+components:
+  schemas:
+    PronunciationAssessment:
+      type: object
+      properties:
+        Confidence:
+          type: number
+        Lexical:
+          type: string
+        ITN:
+          type: string
+        MaskedITN:
+          type: string
+        Display:
+          type: string
+        AccuracyScore:
+          type: number
+        FluencyScore:
+          type: number
+        CompletenessScore:
+          type: number
+        PronScore:
+          type: number
+    PronunciationAssessmentResponse:
+      type: object
+      properties:
+        RecognitionStatus:
+          type: string
+        Offset:
+          type: string
+        Duration:
+          type: string
+        NBest:
+          type: array
+          description: Pronunciation assessment info
+          items:
+            $ref: '#/components/schemas/PronunciationAssessment'
+        DisplayText:
+          type: string
