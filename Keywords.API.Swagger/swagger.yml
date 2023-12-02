@@ -98,7 +98,7 @@ paths:
           required: true
           schema: 
             type: string
-          format: guid
+            format: guid
       responses:
         200:
           description: Ocr video found
@@ -122,7 +122,7 @@ paths:
           required: true
           schema: 
             type: string
-          format: guid
+            format: guid
         - name: url
           in: query
           description: Video url to index
@@ -280,4 +280,4 @@ components:
         keywords:
           type: array
           items:
-            $ref: '#/definitions/Keyword'
+            $ref: '#/components/schemas/Keyword'
