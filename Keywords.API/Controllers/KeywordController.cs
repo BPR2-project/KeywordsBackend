@@ -24,17 +24,15 @@ public class KeywordController: KeywordControllerBase
             if (modelState.Any())
                 return BadRequest(string.Join("\n", modelState));
             
-            var videoExists = _keywordService.KeywordsVideoExistsById(paginatedKeywordsRequest.VideoId.Value);
+            var videoExists = _keywordService.KeywordsVideoExistsById(paginatedKeywordsRequest.VideoId);
             
             if (!videoExists)
                 return NotFound();
             
-            if (paginatedKeywordsRequest.Size is 0 or null)
+            if (paginatedKeywordsRequest.Size is 0)
                 paginatedKeywordsRequest.Size = 10;
-            if (paginatedKeywordsRequest.Page is null)
-                paginatedKeywordsRequest.Page = 0;
 
-            var allVideos = _keywordService.GetAllKeywordsByVideoId(paginatedKeywordsRequest.VideoId.Value, paginatedKeywordsRequest.Size.Value, paginatedKeywordsRequest.Page.Value);
+            var allVideos = _keywordService.GetAllKeywordsByVideoId(paginatedKeywordsRequest.VideoId, paginatedKeywordsRequest.Size, paginatedKeywordsRequest.Page);
 
             if (allVideos.keywords.Any() == false)
                 return Ok(new PaginatedKeywordsResponse()
@@ -51,7 +49,7 @@ public class KeywordController: KeywordControllerBase
                 CurrentPage = paginatedKeywordsRequest.Page,
                 SizeRequested = paginatedKeywordsRequest.Size,
                 TotalAmount = allVideos.totalSize,
-                TotalAmountOfPages = (int)Math.Ceiling((double)allVideos.totalSize / paginatedKeywordsRequest.Size.Value)
+                TotalAmountOfPages = (int)Math.Ceiling((double)allVideos.totalSize / paginatedKeywordsRequest.Size)
             };
             return Ok(response);
         });

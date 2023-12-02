@@ -1,15 +1,10 @@
-swagger: "2.0"
+openapi: 3.0.0
 info:
   description: "Service responsible for handling videos keywords."
   version: "1.0.0"
   title: "Keywords Microservice"
-host: "keywordsbackend.azurewebsites.net"
-basePath: "/"
-tags:
-  - name: "keyword"
-    description: "Everything about video keywords"
-schemes:
-  - "http"
+servers:
+  - url: "https://keywordsbackend.azurewebsites.net"
 paths:
   /keywords/:
     post:
@@ -18,18 +13,20 @@ paths:
       summary: "Get paginated keywords for a video"
       description: "Get paginated keywords for a video"
       operationId: "GetAllKeywordsByVideoId"
-      parameters:
-        - name: PaginatedKeywordsRequest
-          in: body
-          required: true
-          description: Contains pagination details
-          schema:
-            $ref: "#/definitions/PaginatedKeywordsRequest"
+      requestBody:
+        description: Contains pagination details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaginatedKeywordsRequest"
       responses:
         200:
           description: Returns all keywords paginated
-          schema:
-            $ref: "#/definitions/PaginatedKeywordsResponse"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedKeywordsResponse"
         400:
           description: Bad request
         404:
@@ -46,13 +43,16 @@ paths:
           in: path
           description: Keyword Id to get the keyword entity for
           required: true
-          type: string
-          format: guid
+          schema:
+            type: string
+            format: guid
       responses: 
         200: 
           description: Keyword found
-          schema:
-            $ref: "#/definitions/Keyword"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Keyword"
         404:
           description: Keyword not found
     put:
@@ -66,18 +66,22 @@ paths:
           in: path
           description: Keyword Id
           required: true
-          type: string
-          format: guid
+          schema: 
+            type: string
+            format: guid
         - name: toBePublished
           in: query
           description: Bool to state whether will be published or not
           required: false
-          type: boolean
+          schema:
+            type: boolean
       responses: 
         200:
-          description: Keyword published          
-          schema:
-            $ref: "#/definitions/Keyword"
+          description: Keyword published    
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Keyword"
         404:
           description: Keyword not found
   /indexer:
@@ -92,14 +96,17 @@ paths:
           in: query
           description: Video Id to get the video ocr for
           required: true
-          type: string
+          schema: 
+            type: string
       responses:
         200:
           description: Ocr video found
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Video"
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Video"
         404:
           description: Not found
     post:
@@ -113,22 +120,27 @@ paths:
           in: query
           description: Video url to index
           required: true
-          type: string
+          schema: 
+            type: string
         - name: name
           in: query
           description: Video name to index
           required: true
-          type: string
+          schema: 
+            type: string
         - name: description
           in: query
           description: Video description to index
           required: true
-          type: string
+          schema: 
+            type: string
       responses:
         200:
           description: Video indexed
-          schema:
-              $ref: "#/definitions/RequestVideoIndexResponse"
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestVideoIndexResponse"
         404:
           description: Not found
   /speech:
@@ -138,202 +150,209 @@ paths:
       summary: "Create pronunciation assessment"
       description: "Create a pronunciation assessment and receive assessment in response"
       operationId: "CreatePronunciationAssessment"
-      consumes:
-        - multipart/form-data
+      requestBody:
+        content:
+          audio/wav:
+            schema:
+              type: string
+              format: binary
       parameters:
         - name: language
           in: query
           description: Identifies the spoken language that's being recognized, for Danish use da-DK
           required: true
-          type: string
+          schema: 
+            type: string
         - name: referenceText
           in: query
           description: Text of the pronounced word
           required: true
-          type: string     
-        - name: file
-          in: formData
-          description: Uploaded audio file
-          required: true
-          type: file
+          schema: 
+            type: string     
       responses:
         100:
           description: The initial request has been accepted. Proceed with sending the rest of the data.
         200:
           description: Pronunciation Assessment was created successfully
-          schema:
-            $ref: "#/definitions/PronunciationAssessmentResponseDTO"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/PronunciationAssessmentResponseDTO"
         400:
           description: Bad request
-definitions: 
-  Keyword:
-    type: object
-    properties:
-      Id: 
-        type: string
-        format: guid
-        description: Id of the keyword
-      Content:
-        type: string
-        description: Keyword's content can be a word or a phrase
-      VideoId:
-        type: string
-        format: guid
-        description: Id of the video that the keyword belongs to
-      IsPublished:
-        type: boolean
-        description: States if the Keyword is available for users
-      Language:
-        type: string
-        description: The language the keyword belongs to
-      AudioLink:
-        type: string
-        description: Link to the keyword's audio
-  Ocr:
-    type: object
-    properties:
-      text:
-        type: string
-      confidence:
-        type: number
-      language:
-        type: string
-      instances:
-        type: array
-        items:
-          $ref: '#/definitions/Instance'
-          
-  Instance:
-    type: object
-    properties:
-      start:
-        type: string
-      end:
-        type: string
-
-  PaginatedKeywordsRequest:
-    type: object
-    properties:
-      VideoId:
-        type: string
-        format: guid
-        description: Video Id to get the keywords for
-      Size:
-        type: integer
-        description: Size of the page
-      Page:
-        type: integer
-        description: Page number
-  PaginatedKeywordsResponse:
-    type: object
-    properties:
-      Keywords:
-        type: array
-        description: List of videos
-        items:
-          $ref: '#/definitions/Keyword'
-      SizeRequested:
-        type: integer
-        description: Size of the page that was requested
-      TotalAmount:
-        type: integer
-        description: Total number of keywords retrieved
-      CurrentPage:
-        type: integer
-        description: Current page
-      TotalAmountOfPages:
-        type: integer
-        description: Total number of pages based on the specified size
-  Insights:
-    type: object
-    properties:
-      ocr:
-        type: array
-        items:
-          $ref: '#/definitions/Ocr'  
-          
-  Video:
-    type: object
-    properties:
-      id:
-        type: string
-      state:
-        type: string
-      processingProgress:
-        type: string
-      insights:
-        $ref: '#/definitions/Insights'
-        
-  VideoIndexerResponse:
-    type: object
-    properties:
-      videos:
-        type: array
-        items:
-          $ref: '#/definitions/Video'
-
-  IndexInProgress:
-    type: object
-    properties:
-      errorType:
-        type: string
-      message:
-        type: string
-
-  IndexVideoReceipt:
-    type: object
-    properties:
-      accountId:
-        type: string
-      id:
-        type: string
-      description:
-        type: string
-      state:
-        type: string
-
-  RequestVideoIndexResponse:
-    type: object
-    properties:
-      receipt:
-        $ref: '#/definitions/IndexVideoReceipt'
-      indexInProgress:
-        $ref: '#/definitions/IndexInProgress'
+components:  
+  schemas: 
+    Keyword:
+      type: object
+      properties:
+        Id: 
+          type: string
+          format: guid
+          description: Id of the keyword
+        Content:
+          type: string
+          description: Keyword's content can be a word or a phrase
+        VideoId:
+          type: string
+          format: guid
+          description: Id of the video that the keyword belongs to
+        IsPublished:
+          type: boolean
+          description: States if the Keyword is available for users
+        Language:
+          type: string
+          description: The language the keyword belongs to
+        AudioLink:
+          type: string
+          description: Link to the keyword's audio
+    Ocr:
+      type: object
+      properties:
+        text:
+          type: string
+        confidence:
+          type: number
+        language:
+          type: string
+        instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instance'
+            
+    Instance:
+      type: object
+      properties:
+        start:
+          type: string
+        end:
+          type: string
   
-  PronunciationAssessmentDTO:
-    type: object
-    properties:
-      Confidence:
-        type: number
-      Lexical:
-        type: string
-      ITN:
-        type: string
-      MaskedITN:
-        type: string
-      Display:
-        type: string
-      AccuracyScore:
-        type: number
-      FluencyScore:
-        type: number
-      CompletenessScore:
-        type: number
-      PronScore:
-        type: number
-  PronunciationAssessmentResponseDTO:
-    type: object
-    properties:
-      RecognitionStatus:
-        type: string
-      Offset:
-        type: string
-      Duration:
-        type: string
-      NBest:
-        type: array
-        description: Pronunciation assessment info
-        items:
-          $ref: '#/definitions/PronunciationAssessmentDTO'
-      DisplayText:
-        type: string
+    PaginatedKeywordsRequest:
+      type: object
+      properties:
+        VideoId:
+          type: string
+          format: guid
+          description: Video Id to get the keywords for
+        Size:
+          type: integer
+          description: Size of the page
+        Page:
+          type: integer
+          description: Page number
+    PaginatedKeywordsResponse:
+      type: object
+      properties:
+        Keywords:
+          type: array
+          description: List of videos
+          items:
+            $ref: '#/components/schemas/Keyword'
+        SizeRequested:
+          type: integer
+          description: Size of the page that was requested
+        TotalAmount:
+          type: integer
+          description: Total number of keywords retrieved
+        CurrentPage:
+          type: integer
+          description: Current page
+        TotalAmountOfPages:
+          type: integer
+          description: Total number of pages based on the specified size
+    Insights:
+      type: object
+      properties:
+        ocr:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ocr'  
+            
+    Video:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+        processingProgress:
+          type: string
+        insights:
+          $ref: '#/components/schemas/Insights'
+          
+    VideoIndexerResponse:
+      type: object
+      properties:
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+  
+    IndexInProgress:
+      type: object
+      properties:
+        errorType:
+          type: string
+        message:
+          type: string
+  
+    IndexVideoReceipt:
+      type: object
+      properties:
+        accountId:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        state:
+          type: string
+  
+    RequestVideoIndexResponse:
+      type: object
+      properties:
+        receipt:
+          $ref: '#/components/schemas/IndexVideoReceipt'
+        indexInProgress:
+          $ref: '#/components/schemas/IndexInProgress'
+    
+    PronunciationAssessmentDTO:
+      type: object
+      properties:
+        Confidence:
+          type: number
+        Lexical:
+          type: string
+        ITN:
+          type: string
+        MaskedITN:
+          type: string
+        Display:
+          type: string
+        AccuracyScore:
+          type: number
+        FluencyScore:
+          type: number
+        CompletenessScore:
+          type: number
+        PronScore:
+          type: number
+    PronunciationAssessmentResponseDTO:
+      type: object
+      properties:
+        RecognitionStatus:
+          type: string
+        Offset:
+          type: string
+        Duration:
+          type: string
+        NBest:
+          type: array
+          description: Pronunciation assessment info
+          items:
+            $ref: '#/components/schemas/PronunciationAssessmentDTO'
+        DisplayText:
+          type: string
+    AudioFile:
+      type: string
+      format: binary

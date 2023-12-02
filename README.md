@@ -14,7 +14,7 @@
   - [Language](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-Language 'Keywords.API.Swagger.Controllers.Generated.Keyword.Language')
   - [VideoId](#P-Keywords-API-Swagger-Controllers-Generated-Keyword-VideoId 'Keywords.API.Swagger.Controllers.Generated.Keyword.VideoId')
 - [KeywordControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase')
-  - [GetAllKeywordsByVideoId(paginatedKeywordsRequest)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetAllKeywordsByVideoId-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetAllKeywordsByVideoId(Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest)')
+  - [GetAllKeywordsByVideoId(body)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetAllKeywordsByVideoId-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetAllKeywordsByVideoId(Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest)')
   - [GetKeyword(keywordId)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetKeyword-System-Guid- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.GetKeyword(System.Guid)')
   - [PublishKeyword(keywordId,toBePublished)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-PublishKeyword-System-Guid,System-Nullable{System-Boolean}- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.PublishKeyword(System.Guid,System.Nullable{System.Boolean})')
 - [PaginatedKeywordsRequest](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest')
@@ -30,7 +30,7 @@
 - [PronunciationAssessmentResponseDTO](#T-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO 'Keywords.API.Swagger.Controllers.Generated.PronunciationAssessmentResponseDTO')
   - [NBest](#P-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO-NBest 'Keywords.API.Swagger.Controllers.Generated.PronunciationAssessmentResponseDTO.NBest')
 - [SpeechControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase')
-  - [CreatePronunciationAssessment(language,referenceText,file)](#M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-System-String,System-String,Keywords-API-Swagger-Controllers-Generated-FileParameter- 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase.CreatePronunciationAssessment(System.String,System.String,Keywords.API.Swagger.Controllers.Generated.FileParameter)')
+  - [CreatePronunciationAssessment(language,referenceText)](#M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-Microsoft-AspNetCore-Http-IFormFile,System-String,System-String- 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase.CreatePronunciationAssessment(Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)')
 
 <a name='T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase'></a>
 ## IndexerControllerBase `type`
@@ -140,7 +140,7 @@ Id of the video that the keyword belongs to
 Keywords.API.Swagger.Controllers.Generated
 
 <a name='M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-GetAllKeywordsByVideoId-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-'></a>
-### GetAllKeywordsByVideoId(paginatedKeywordsRequest) `method`
+### GetAllKeywordsByVideoId(body) `method`
 
 ##### Summary
 
@@ -154,7 +154,7 @@ Returns all keywords paginated
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| paginatedKeywordsRequest | [Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest') | Contains pagination details |
+| body | [Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest') | Contains pagination details |
 
 ##### Remarks
 
@@ -294,8 +294,8 @@ Pronunciation assessment info
 
 Keywords.API.Swagger.Controllers.Generated
 
-<a name='M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-System-String,System-String,Keywords-API-Swagger-Controllers-Generated-FileParameter-'></a>
-### CreatePronunciationAssessment(language,referenceText,file) `method`
+<a name='M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-Microsoft-AspNetCore-Http-IFormFile,System-String,System-String-'></a>
+### CreatePronunciationAssessment(language,referenceText) `method`
 
 ##### Summary
 
@@ -309,9 +309,8 @@ Pronunciation Assessment was created successfully
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| language | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Identifies the spoken language that's being recognized, for Danish use da-DK |
+| language | [Microsoft.AspNetCore.Http.IFormFile](#T-Microsoft-AspNetCore-Http-IFormFile 'Microsoft.AspNetCore.Http.IFormFile') | Identifies the spoken language that's being recognized, for Danish use da-DK |
 | referenceText | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Text of the pronounced word |
-| file | [Keywords.API.Swagger.Controllers.Generated.FileParameter](#T-Keywords-API-Swagger-Controllers-Generated-FileParameter 'Keywords.API.Swagger.Controllers.Generated.FileParameter') | Uploaded audio file |
 
 ##### Remarks
 

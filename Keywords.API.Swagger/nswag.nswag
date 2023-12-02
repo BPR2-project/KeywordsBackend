@@ -10,6 +10,7 @@
   },
   "codeGenerators": {
     "openApiToCSharpController": {
+      "useTags": true,
       "controllerBaseClass": "Microsoft.AspNetCore.Mvc.Controller",
       "controllerStyle": "Abstract",
       "controllerTarget": "AspNetCore",

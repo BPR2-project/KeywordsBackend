@@ -31,15 +31,11 @@ namespace speechToText_api
         /// Create a pronunciation assessment and receive assessment in response
         /// </remarks>
         /// <param name="language">Identifies the spoken language that's being recognized, for Danish use da-DK</param>
-        /// <param name="file">Uploaded audio file</param>
         /// <param name="ocp_Apim_Subscription_Key">Authorization header</param>
-        /// <param name="content_type">Describes the format and codec of the provided audio data</param>
         /// <param name="pronunciation_Assessment">Pronunciation assessment parameters</param>
-        /// <param name="accept">If provided, it must be application/json</param>
-        /// <param name="sendChunked">Send audio in chunks</param>
         /// <returns>Pronunciation Assessment was created successfully</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<PronunciationAssessmentResponse> CreatePronunciationAssessmentAsync(string language, FileParameter file, string ocp_Apim_Subscription_Key, string content_type, string pronunciation_Assessment, string accept = null, bool? sendChunked = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<PronunciationAssessmentResponse> CreatePronunciationAssessmentAsync(string language, string ocp_Apim_Subscription_Key, string pronunciation_Assessment, System.IO.Stream body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -88,15 +84,11 @@ namespace speechToText_api
         /// Create a pronunciation assessment and receive assessment in response
         /// </remarks>
         /// <param name="language">Identifies the spoken language that's being recognized, for Danish use da-DK</param>
-        /// <param name="file">Uploaded audio file</param>
         /// <param name="ocp_Apim_Subscription_Key">Authorization header</param>
-        /// <param name="content_type">Describes the format and codec of the provided audio data</param>
         /// <param name="pronunciation_Assessment">Pronunciation assessment parameters</param>
-        /// <param name="accept">If provided, it must be application/json</param>
-        /// <param name="sendChunked">Send audio in chunks</param>
         /// <returns>Pronunciation Assessment was created successfully</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PronunciationAssessmentResponse> CreatePronunciationAssessmentAsync(string language, FileParameter file, string ocp_Apim_Subscription_Key, string content_type, string pronunciation_Assessment, string accept = null, bool? sendChunked = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<PronunciationAssessmentResponse> CreatePronunciationAssessmentAsync(string language, string ocp_Apim_Subscription_Key, string pronunciation_Assessment, System.IO.Stream body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (language == null)
                 throw new System.ArgumentNullException("language");
@@ -112,35 +104,14 @@ namespace speechToText_api
                         throw new System.ArgumentNullException("ocp_Apim_Subscription_Key");
                     request_.Headers.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", ConvertToString(ocp_Apim_Subscription_Key, System.Globalization.CultureInfo.InvariantCulture));
 
-                    if (content_type == null)
-                        throw new System.ArgumentNullException("content_type");
-                    request_.Headers.TryAddWithoutValidation("Content-type", ConvertToString(content_type, System.Globalization.CultureInfo.InvariantCulture));
-
                     if (pronunciation_Assessment == null)
                         throw new System.ArgumentNullException("pronunciation_Assessment");
                     request_.Headers.TryAddWithoutValidation("Pronunciation-Assessment", ConvertToString(pronunciation_Assessment, System.Globalization.CultureInfo.InvariantCulture));
-
-                    if (accept != null)
-                        request_.Headers.TryAddWithoutValidation("Accept", ConvertToString(accept, System.Globalization.CultureInfo.InvariantCulture));
-
-                    if (sendChunked != null)
-                        request_.Headers.TryAddWithoutValidation("SendChunked", ConvertToString(sendChunked, System.Globalization.CultureInfo.InvariantCulture));
-                    var boundary_ = System.Guid.NewGuid().ToString();
-                    var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
-                    content_.Headers.Remove("Content-Type");
-                    content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
-
-                    if (file == null)
-                        throw new System.ArgumentNullException("file");
-                    else
-                    {
-                        var content_file_ = new System.Net.Http.StreamContent(file.Data);
-                        if (!string.IsNullOrEmpty(file.ContentType))
-                            content_file_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(file.ContentType);
-                        content_.Add(content_file_, "file", file.FileName ?? "file");
-                    }
+                    var content_ = new System.Net.Http.StreamContent(body);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("audio/wav");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(BaseUrl)) urlBuilder_.Append(BaseUrl);
@@ -325,55 +296,73 @@ namespace speechToText_api
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class PronunciationAssessment
     {
-        [Newtonsoft.Json.JsonProperty("Confidence", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double? Confidence { get; set; }
+        [Newtonsoft.Json.JsonProperty("Confidence", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double Confidence { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("Lexical", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("Lexical", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Lexical { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ITN", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("ITN", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ITN { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("MaskedITN", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("MaskedITN", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string MaskedITN { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("Display", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("Display", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Display { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("AccuracyScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double? AccuracyScore { get; set; }
+        [Newtonsoft.Json.JsonProperty("AccuracyScore", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double AccuracyScore { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("FluencyScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double? FluencyScore { get; set; }
+        [Newtonsoft.Json.JsonProperty("FluencyScore", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double FluencyScore { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("CompletenessScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double? CompletenessScore { get; set; }
+        [Newtonsoft.Json.JsonProperty("CompletenessScore", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double CompletenessScore { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("PronScore", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double? PronScore { get; set; }
+        [Newtonsoft.Json.JsonProperty("PronScore", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double PronScore { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class PronunciationAssessmentResponse
     {
-        [Newtonsoft.Json.JsonProperty("RecognitionStatus", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("RecognitionStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string RecognitionStatus { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("Offset", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("Offset", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Offset { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("Duration", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("Duration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Duration { get; set; }
 
         /// <summary>
         /// Pronunciation assessment info
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("NBest", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("NBest", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<PronunciationAssessment> NBest { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("DisplayText", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("DisplayText", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string DisplayText { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 

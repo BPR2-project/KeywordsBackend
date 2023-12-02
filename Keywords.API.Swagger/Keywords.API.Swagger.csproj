@@ -24,6 +24,10 @@
         <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\Generated\" />
+    </ItemGroup>
+
     <Target Name="NSwag" BeforeTargets="Build">
         <Exec Command="$(NSwagExe_Net60) run nswag.nswag /variables:Configuration=$(Configuration)" />
     </Target>
