@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using System.Web;
 using AutoMapper;
 using indexer_api;
@@ -86,6 +87,8 @@ public class IndexerService : IIndexerService
         var keyPhraseIntersection = transcriptKeyPhrases.OrderByDescending(trans =>
                 ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans, StringComparison.InvariantCultureIgnoreCase)))
             .Take(50).ToList();
+        
+        keyPhraseIntersection = keyPhraseIntersection.ConvertAll(text => Regex.Replace(text, "^[a-z]", c => c.Value.ToUpper()));
 
         var keywords = keyPhraseIntersection.Select(x => new KeywordEntity
         {
@@ -140,8 +143,8 @@ public class IndexerService : IIndexerService
 
     private static KeyPhraseRequest CreateKeyPhraseRequest(Video video)
     {
-        var ocr = video.Insights.Ocr.Select(x => x.Text);
-        var transcript = video.Insights.Transcript.Select(x => x.Text);
+        var ocr = video.Insights.Ocr.Select(x => x.Text).ToList().ConvertAll(text => text.ToLower());
+        var transcript = video.Insights.Transcript.Select(x => x.Text).ToList().ConvertAll(text => text.ToLower());
 
         var request = new KeyPhraseRequest
         {
