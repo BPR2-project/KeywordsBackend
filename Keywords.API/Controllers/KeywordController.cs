@@ -32,7 +32,8 @@ public class KeywordController: KeywordControllerBase
             if (paginatedKeywordsRequest.Size is 0)
                 paginatedKeywordsRequest.Size = 10;
 
-            var allVideos = _keywordService.GetAllKeywordsByVideoId(paginatedKeywordsRequest.VideoId, paginatedKeywordsRequest.Size, paginatedKeywordsRequest.Page);
+            var allVideos = _keywordService.GetAllKeywordsByVideoId(
+                paginatedKeywordsRequest.VideoId, paginatedKeywordsRequest.Size, paginatedKeywordsRequest.Page, paginatedKeywordsRequest.Published);
 
             if (allVideos.keywords.Any() == false)
                 return Ok(new PaginatedKeywordsResponse()

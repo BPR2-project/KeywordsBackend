@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // External services
 builder.Services.AddScoped<IIndexerClient>(_ => new IndexerClient(builder.Configuration["Indexer:BaseUrl"]));
-builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechClient(builder.Configuration["TextToSpeech:Url"]));
+builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechClient(builder.Configuration["TextToSpeech:Uri"]));
 builder.Services.AddScoped<IKeyPhraseClient>(_ => new KeyPhraseClient(builder.Configuration["KeyPhrase:BaseUrl"]));
 builder.Services.AddScoped<IAzureSpeechToTextClient>(_ => new AzureSpeechToTextClient(builder.Configuration["SpeechToText:BaseUrl"]));
 

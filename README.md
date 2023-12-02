@@ -19,6 +19,7 @@
   - [PublishKeyword(keywordId,toBePublished)](#M-Keywords-API-Swagger-Controllers-Generated-KeywordControllerBase-PublishKeyword-System-Guid,System-Nullable{System-Boolean}- 'Keywords.API.Swagger.Controllers.Generated.KeywordControllerBase.PublishKeyword(System.Guid,System.Nullable{System.Boolean})')
 - [PaginatedKeywordsRequest](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest')
   - [Page](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-Page 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest.Page')
+  - [Published](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-Published 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest.Published')
   - [Size](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-Size 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest.Size')
   - [VideoId](#P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-VideoId 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsRequest.VideoId')
 - [PaginatedKeywordsResponse](#T-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsResponse 'Keywords.API.Swagger.Controllers.Generated.PaginatedKeywordsResponse')
@@ -215,6 +216,13 @@ Keywords.API.Swagger.Controllers.Generated
 ##### Summary
 
 Page number
+
+<a name='P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-Published'></a>
+### Published `property`
+
+##### Summary
+
+Published flag for each keyword
 
 <a name='P-Keywords-API-Swagger-Controllers-Generated-PaginatedKeywordsRequest-Size'></a>
 ### Size `property`
