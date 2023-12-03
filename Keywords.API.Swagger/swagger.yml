@@ -209,6 +209,11 @@ components:
         Page:
           type: integer
           description: Page number
+        Published:
+          type: boolean
+          description: Published flag for each keyword
+          default: false
+      additionalProperties: false
     PaginatedKeywordsResponse:
       type: object
       properties:

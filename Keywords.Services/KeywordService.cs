@@ -25,10 +25,10 @@ public class KeywordService: IKeywordService
         return _mapper.Map<Keyword>(keywordEntity);
     }
 
-    public (List<Keyword> keywords, int totalSize) GetAllKeywordsByVideoId(Guid videoId, int size, int page)
+    public (List<Keyword> keywords, int totalSize) GetAllKeywordsByVideoId(Guid videoId, int size, int page, bool published)
     {
-        var keywordsEntities = _keywordEntityRepository.GetAllKeywordsByVideoId(videoId, size, page);
-
+        var keywordsEntities = _keywordEntityRepository.GetAllKeywordsByVideoId(videoId, size, page, published);
+        
         var keywords = keywordsEntities.keywords
             .Select(a => _mapper.Map<Keyword>(a))
             .ToList();

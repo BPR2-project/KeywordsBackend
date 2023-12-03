@@ -43,11 +43,16 @@ public class KeywordEntityRepository: BaseRepository<KeywordEntity>, IKeywordEnt
         return DbSet.Any(a => a.VideoId == videoId && a.DestroyedAt == null && a.DestroyedBy == null);
     }
 
-    public (List<KeywordEntity>? keywords, int totalsize) GetAllKeywordsByVideoId(Guid videoId, int size, int page)
+    public (List<KeywordEntity>? keywords, int totalsize) GetAllKeywordsByVideoId(Guid videoId, int size, int page, bool? published)
     {
         var query = GetQueryWithAllIncludes();
 
         query = query.Where(a => a.DestroyedAt == null && a.DestroyedBy == null && a.VideoId == videoId);
+
+        if (published != null && published == true)
+        {
+            query = query.Where(a => a.IsPublished == published);
+        }
         
         var totalSize = query.Count();
 
