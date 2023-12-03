@@ -72,7 +72,7 @@ namespace Keywords.API.Swagger.Controllers.Generated
         /// <param name="videoId">Video Id to get the video ocr for</param>
         /// <returns>Ocr video found</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("indexer/{videoId}")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<IndexerResponse>> GetIndexerResponse([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid videoId);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<IndexerProgress>> GetIndexerProgress([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid videoId);
 
         /// <summary>
         /// Index a video
@@ -368,17 +368,14 @@ namespace Keywords.API.Swagger.Controllers.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class IndexerResponse
+    public partial class IndexerProgress
     {
         [Newtonsoft.Json.JsonProperty("state", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public IndexerResponseState State { get; set; }
+        public IndexerProgressState State { get; set; }
 
         [Newtonsoft.Json.JsonProperty("processingProgress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ProcessingProgress { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("keywords", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.List<Keyword> Keywords { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -395,17 +392,17 @@ namespace Keywords.API.Swagger.Controllers.Generated
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static IndexerResponse FromJson(string data)
+        public static IndexerProgress FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<IndexerResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IndexerProgress>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum IndexerResponseState
+    public enum IndexerProgressState
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"Indexing")]

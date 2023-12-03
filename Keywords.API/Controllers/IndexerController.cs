@@ -15,9 +15,9 @@ public class IndexerController : IndexerControllerBase
         _logger = logger;
     }
     
-    public override async Task<ActionResult<IndexerResponse>> GetIndexerResponse(Guid videoId)
+    public override async Task<ActionResult<IndexerProgress>> GetIndexerProgress(Guid videoId)
     {
-        var indexerOutput = await _indexerService.GetIndexerOutputAsync(videoId);
+        var indexerOutput = await _indexerService.GetIndexerProgressAsync(videoId);
         if (indexerOutput == null)
         {
             return NotFound();
