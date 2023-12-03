@@ -28,4 +28,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Keywords.API\Keywords.API.csproj" />
+    </ItemGroup>
+
 </Project>
