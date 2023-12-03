@@ -12,9 +12,6 @@ public class IndexerMapper: Profile
         CreateMap<Video, IndexerProgress>()
             .ForMember(a => a.State,
                 opt => opt.MapFrom(a => IndexerState.Indexing));
-        CreateMap<IEnumerable<KeywordEntity>, IndexerProgress>()
-            .ForMember(a => a.State,
-                opt => opt.MapFrom(a => IndexerState.Succeeded));
         CreateMap<IndexerEntity, IndexerProgress>();
         CreateMap<KeywordEntity, Keyword>();
     }

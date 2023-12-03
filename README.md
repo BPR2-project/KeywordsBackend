@@ -45,21 +45,21 @@ Keywords.API.Swagger.Controllers.Generated
 
 ##### Summary
 
-Get a keyword list of the indexed video
+Get the progress of the video indexer including key phrase extraction
 
 ##### Returns
 
-Ocr video found
+Indexing is successfully being processed
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| videoId | [System.Guid](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Guid 'System.Guid') | Video Id to get the video ocr for |
+| videoId | [System.Guid](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Guid 'System.Guid') | Video Id to be indexed and analysed |
 
 ##### Remarks
 
-Get a keyword list of the indexed video
+Get the progress of video indexing and key phrase extraction
 
 <a name='M-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase-IndexVideo-System-Guid,System-String-'></a>
 ### IndexVideo(videoId,url) `method`

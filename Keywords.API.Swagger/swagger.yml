@@ -90,7 +90,7 @@ paths:
         - "indexer"
       summary: "Get the progress of the video indexer including key phrase extraction"
       description: "Get the progress of video indexing and key phrase extraction"
-      operationId: "IndexerProgressAsync"
+      operationId: "GetIndexerProgressAsync"
       parameters:
         - name: videoId
           in: path
@@ -278,7 +278,8 @@ components:
           type: string
           enum: [ Indexing,
                   ExtractingKeyPhrases,
-                  Failed,
-                  Succeeded ]
+                  Succeeded,
+                  Failed]
         processingProgress:
           type: string
+      additionalProperties: false
