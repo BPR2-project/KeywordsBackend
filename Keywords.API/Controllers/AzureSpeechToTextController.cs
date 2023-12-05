@@ -13,12 +13,12 @@ public class AzureSpeechToTextController: SpeechControllerBase
         _azureSpeechToTextService = azureSpeechToTextService;
     }
 
-    public override Task<ActionResult<PronunciationAssessmentResponseDTO>> CreatePronunciationAssessment(IFormFile upfile, string language, string referenceText)
+    public override Task<ActionResult<PronunciationAssessmentResponseDTO>> CreatePronunciationAssessment(IFormFile body, string language, string referenceText)
     {
         return Task.Run<ActionResult<PronunciationAssessmentResponseDTO>>(async () =>
         {
             PronunciationAssessmentResponseDTO response = await _azureSpeechToTextService.CreatePronunciationAssessment(
-                language, referenceText, upfile);
+                language, referenceText, body);
             return Ok(response);
         });
     }
