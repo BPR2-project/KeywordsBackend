@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using System.Text.RegularExpressions;
-using System.Web;
+﻿using System.Text.RegularExpressions;
 using AutoMapper;
 using indexer_api;
 using Keywords.API.Swagger.Controllers.Generated;
@@ -9,7 +6,6 @@ using Keywords.Data;
 using Keywords.Data.Repositories.Interfaces;
 using Keywords.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Keywords.Services;
 
@@ -52,7 +48,6 @@ public class IndexerService : IIndexerService
             case IndexerState.ExtractingKeyPhrases:
                 return await GetKeyPhraseResultAsync(entity);
             case IndexerState.Succeeded:
-                return _mapper.Map<IndexerProgress>(entity);
             case IndexerState.Failed:
                 break;
             default:
