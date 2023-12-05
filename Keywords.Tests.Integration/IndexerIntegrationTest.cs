@@ -51,13 +51,11 @@ public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplic
 
         // Act
         var client = _factory.CreateClient();
-        var response = await client.GetAsync($"/indexer/{testVideoId}");
-        var progress = await response.Content.ReadFromJsonAsync<IndexerProgress>();
+        var response = await client.GetFromJsonAsync<IndexerProgress>($"/indexer/{testVideoId}");
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(IndexerProgressState.Indexing, progress?.State);
-        Assert.Equal(video.ProcessingProgress, progress?.ProcessingProgress);
+        Assert.Equal(IndexerProgressState.Indexing, response?.State);
+        Assert.Equal(video.ProcessingProgress, response?.ProcessingProgress);
         _factory.IndexerRepositoryMock.Verify(r => r.Insert(It.IsAny<IndexerEntity>(), It.IsAny<string>()),
             Times.Never);
     }
@@ -74,13 +72,11 @@ public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplic
 
         // Act
         var client = _factory.CreateClient();
-        var response = await client.GetAsync($"/indexer/{testVideoId}");
-        var progress = await response.Content.ReadFromJsonAsync<IndexerProgress>();
+        var response = await client.GetFromJsonAsync<IndexerProgress>($"/indexer/{testVideoId}");
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(IndexerProgressState.ExtractingKeyPhrases, progress?.State);
-        Assert.Null(progress?.ProcessingProgress);
+        Assert.Equal(IndexerProgressState.ExtractingKeyPhrases, response?.State);
+        Assert.Null(response?.ProcessingProgress);
         _factory.IndexerRepositoryMock.Verify(r => r.Update(It.Is<IndexerEntity>(x => x.Id == testVideoId), "email"),
             Times.Once);
     }
@@ -95,13 +91,11 @@ public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplic
 
         // Act
         var client = _factory.CreateClient();
-        var response = await client.GetAsync($"/indexer/{testVideoId}");
-        var progress = await response.Content.ReadFromJsonAsync<IndexerProgress>();
+        var response = await client.GetFromJsonAsync<IndexerProgress>($"/indexer/{testVideoId}");
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(IndexerProgressState.Succeeded, progress?.State);
-        Assert.Null(progress?.ProcessingProgress);
+        Assert.Equal(IndexerProgressState.Succeeded, response?.State);
+        Assert.Null(response?.ProcessingProgress);
         _factory.KeywordsRepositoryMock.Verify(r => r.InsertRange(It.IsAny<IEnumerable<KeywordEntity>>(), "email"), 
             Times.Once);
         _factory.IndexerRepositoryMock.Verify(r => r.Update(It.Is<IndexerEntity>(x => x.Id == testVideoId), "email"),
