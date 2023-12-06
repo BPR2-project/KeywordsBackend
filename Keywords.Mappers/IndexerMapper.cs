@@ -9,15 +9,10 @@ public class IndexerMapper: Profile
 {
     public IndexerMapper()
     {
-        CreateMap<Video, IndexerResponse>()
+        CreateMap<Video, IndexerProgress>()
             .ForMember(a => a.State,
                 opt => opt.MapFrom(a => IndexerState.Indexing));
-        CreateMap<IEnumerable<KeywordEntity>, IndexerResponse>()
-            .ForMember(a => a.State,
-                opt => opt.MapFrom(a => IndexerState.Succeeded))
-            .ForMember(a => a.Keywords,
-            opt => opt.MapFrom(a => a));
-        CreateMap<IndexerEntity, IndexerResponse>();
+        CreateMap<IndexerEntity, IndexerProgress>();
         CreateMap<KeywordEntity, Keyword>();
     }
 }

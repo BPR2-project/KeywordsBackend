@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="coverlet.msbuild" Version="6.0.0">
             <PrivateAssets>all</PrivateAssets>
@@ -17,6 +18,8 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.24" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+        <PackageReference Include="Moq" Version="4.20.70" />
+        <PackageReference Include="WireMock.Net" Version="1.5.41" />
         <PackageReference Include="xunit" Version="2.5.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
           <PrivateAssets>all</PrivateAssets>
@@ -26,6 +29,10 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Keywords.API\Keywords.API.csproj" />
     </ItemGroup>
 
 </Project>

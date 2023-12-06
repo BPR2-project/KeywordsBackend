@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using System.Text.RegularExpressions;
-using System.Web;
+﻿using System.Text.RegularExpressions;
 using AutoMapper;
 using indexer_api;
 using Keywords.API.Swagger.Controllers.Generated;
@@ -9,7 +6,6 @@ using Keywords.Data;
 using Keywords.Data.Repositories.Interfaces;
 using Keywords.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Keywords.Services;
 
@@ -40,7 +36,7 @@ public class IndexerService : IIndexerService
         _keyPhraseApiKey = configuration["KeyPhrase:ApiKey"];
     }
 
-    public async Task<IndexerResponse?> GetIndexerOutputAsync(Guid videoId)
+    public async Task<IndexerProgress?> GetIndexerProgressAsync(Guid videoId)
     {
         var entity = _indexerEntityRepository.GetById(videoId);
         if (entity == null) return null;
@@ -52,28 +48,21 @@ public class IndexerService : IIndexerService
             case IndexerState.ExtractingKeyPhrases:
                 return await GetKeyPhraseResultAsync(entity);
             case IndexerState.Succeeded:
-                return GetKeyWords(entity);
             case IndexerState.Failed:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        return _mapper.Map<IndexerResponse>(entity);
+        return _mapper.Map<IndexerProgress>(entity);
     }
 
-    private IndexerResponse GetKeyWords(IndexerEntity entity)
-    {
-        var keywords = _keywordEntityRepository.GetAllKeywordsByVideoId(entity.Id, 100, 0).keywords;
-        return _mapper.Map<IndexerResponse>(keywords);
-    }
-
-    private async Task<IndexerResponse?> GetKeyPhraseResultAsync(IndexerEntity entity)
+    private async Task<IndexerProgress?> GetKeyPhraseResultAsync(IndexerEntity entity)
     {
         var response = await _keyPhraseClient.GetJobResultAsync(_keyPhraseApiKey, entity.KeyPhraseJobId);
         if (response.Result?.Status != "succeeded")
         {
-            return _mapper.Map<IndexerResponse>(entity);
+            return _mapper.Map<IndexerProgress>(entity);
         }
 
         var documents = response.Result.Tasks?.Items?.FirstOrDefault()?.Results?.Documents?.ToList();
@@ -85,7 +74,7 @@ public class IndexerService : IIndexerService
         var ocrKeyPhrases = documents[0].KeyPhrases;
         var transcriptKeyPhrases = documents[1].KeyPhrases;
         var keyPhraseIntersection = transcriptKeyPhrases.OrderByDescending(trans =>
-                ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans, StringComparison.InvariantCultureIgnoreCase)))
+                ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans)))
             .Take(50).ToList();
         
         keyPhraseIntersection = keyPhraseIntersection.ConvertAll(text => Regex.Replace(text, "^[a-z]", c => c.Value.ToUpper()));
@@ -105,15 +94,15 @@ public class IndexerService : IIndexerService
         _indexerEntityRepository.Update(entity, "email");
         _indexerEntityRepository.Save();
 
-        return GetKeyWords(entity);
+        return _mapper.Map<IndexerProgress>(entity);
     }
 
-    private async Task<IndexerResponse> GetIndexerResultAsync(IndexerEntity entity)
+    private async Task<IndexerProgress> GetIndexerResultAsync(IndexerEntity entity)
     {
         var video = await GetIndexerOutputAsync(entity);
         if (video.Insights?.Ocr == null || video.Insights?.Transcript == null)
         {
-            return _mapper.Map<IndexerResponse>(video);
+            return _mapper.Map<IndexerProgress>(video);
         }
 
         var job = await CreateJobRequest(video);
@@ -124,7 +113,7 @@ public class IndexerService : IIndexerService
         _indexerEntityRepository.Update(entity, "email");
         _indexerEntityRepository.Save();
 
-        return _mapper.Map<IndexerResponse>(entity);
+        return _mapper.Map<IndexerProgress>(entity);
     }
 
     private async Task<string?> CreateJobRequest(Video video)
