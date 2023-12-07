@@ -143,7 +143,7 @@ paths:
       operationId: "CreatePronunciationAssessment"
       requestBody:
         content:
-          application/octet-stream:
+          multipart/form-data:
             schema:
               type: string
               format: binary
@@ -169,6 +169,30 @@ paths:
                   $ref: "#/components/schemas/PronunciationAssessmentResponseDTO"
         400:
           description: Bad request
+  /text/audio/{id}:
+    post:
+      tags:
+        - "textToSpeech"
+      summary: "Generate audio for keyword"
+      description: "Generate audio and attach its link to the keyword "
+      operationId: "CreateAudio"
+      parameters:
+        - name: id
+          in: query
+          description: id of the keyword 
+          required: true
+          schema:
+            type: string
+            format: guid
+      responses:
+        200:
+          description: Audio was generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Keyword"
+        404:
+          description: Not found
 components:  
   schemas: 
     Keyword:

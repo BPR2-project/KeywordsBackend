@@ -32,6 +32,8 @@
   - [NBest](#P-Keywords-API-Swagger-Controllers-Generated-PronunciationAssessmentResponseDTO-NBest 'Keywords.API.Swagger.Controllers.Generated.PronunciationAssessmentResponseDTO.NBest')
 - [SpeechControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase')
   - [CreatePronunciationAssessment(language,referenceText)](#M-Keywords-API-Swagger-Controllers-Generated-SpeechControllerBase-CreatePronunciationAssessment-Microsoft-AspNetCore-Http-IFormFile,System-String,System-String- 'Keywords.API.Swagger.Controllers.Generated.SpeechControllerBase.CreatePronunciationAssessment(Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)')
+- [TextToSpeechControllerBase](#T-Keywords-API-Swagger-Controllers-Generated-TextToSpeechControllerBase 'Keywords.API.Swagger.Controllers.Generated.TextToSpeechControllerBase')
+  - [CreateAudio(id)](#M-Keywords-API-Swagger-Controllers-Generated-TextToSpeechControllerBase-CreateAudio-System-Guid- 'Keywords.API.Swagger.Controllers.Generated.TextToSpeechControllerBase.CreateAudio(System.Guid)')
 
 <a name='T-Keywords-API-Swagger-Controllers-Generated-IndexerControllerBase'></a>
 ## IndexerControllerBase `type`
@@ -322,3 +324,31 @@ Pronunciation Assessment was created successfully
 ##### Remarks
 
 Create a pronunciation assessment and receive assessment in response
+
+<a name='T-Keywords-API-Swagger-Controllers-Generated-TextToSpeechControllerBase'></a>
+## TextToSpeechControllerBase `type`
+
+##### Namespace
+
+Keywords.API.Swagger.Controllers.Generated
+
+<a name='M-Keywords-API-Swagger-Controllers-Generated-TextToSpeechControllerBase-CreateAudio-System-Guid-'></a>
+### CreateAudio(id) `method`
+
+##### Summary
+
+Generate audio for keyword
+
+##### Returns
+
+Audio was generated successfully
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| id | [System.Guid](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Guid 'System.Guid') | id of the keyword |
+
+##### Remarks
+
+Generate audio and attach its link to the keyword
