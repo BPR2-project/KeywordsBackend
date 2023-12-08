@@ -280,4 +280,5 @@ components:
                   Failed]
         processingProgress:
           type: string
+          nullable: true
       additionalProperties: false
