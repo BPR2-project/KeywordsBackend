@@ -374,7 +374,7 @@ namespace Keywords.API.Swagger.Controllers.Generated
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public IndexerProgressState State { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("processingProgress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("processingProgress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ProcessingProgress { get; set; }
 
         public string ToJson()
