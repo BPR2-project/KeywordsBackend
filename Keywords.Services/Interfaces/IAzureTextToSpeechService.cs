@@ -4,5 +4,5 @@ namespace Keywords.Services.Interfaces;
 
 public interface IAzureTextToSpeechService
 {
-    Task<Keyword> CreateAudio(Guid keywordId);
+    Task<Keyword?> CreateAudio(Guid keywordId);
 }
