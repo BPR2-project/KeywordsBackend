@@ -106,6 +106,23 @@ namespace Keywords.API.Swagger.Controllers.Generated
 
     }
 
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
+
+    public abstract class TextToSpeechControllerBase : Microsoft.AspNetCore.Mvc.Controller
+    {
+        /// <summary>
+        /// Generate audio for keyword
+        /// </summary>
+        /// <remarks>
+        /// Generate audio and attach its link to the keyword
+        /// </remarks>
+        /// <param name="id">id of the keyword</param>
+        /// <returns>Audio was generated successfully</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("text/audio/{id}")]
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Keyword>> CreateAudio([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid id);
+
+    }
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.20.0.0 (NJsonSchema v10.9.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Keyword
     {

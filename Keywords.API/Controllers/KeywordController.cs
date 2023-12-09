@@ -18,7 +18,7 @@ public class KeywordController: KeywordControllerBase
 
     public override Task<ActionResult<PaginatedKeywordsResponse>> GetAllKeywordsByVideoId(PaginatedKeywordsRequest paginatedKeywordsRequest)
     {
-        return Task.Run<ActionResult<PaginatedKeywordsResponse>>(async () =>
+        return Task.Run<ActionResult<PaginatedKeywordsResponse>>(() =>
         {
             var modelState = ModelState.GetAllErrors();
             if (modelState.Any())
