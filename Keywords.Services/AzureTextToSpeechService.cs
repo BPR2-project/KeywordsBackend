@@ -1,3 +1,4 @@
+using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
@@ -17,13 +18,14 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
 {
     private IKeywordEntityRepository _keywordEntityRepository;
     private IAzureTextToSpeechClient _azureTextToSpeechClient;
+    private IMapper _mapper;
     private string _ttsSubscriptionKey;
     private string _ttsRegion;
     private string _blobUri;
     private string _blobContainer;
 
     public AzureTextToSpeechService(IAzureTextToSpeechClient azureTextToSpeechClient,
-        IKeywordEntityRepository keywordEntityRepository, IConfiguration configuration)
+        IKeywordEntityRepository keywordEntityRepository, IConfiguration configuration, IMapper mapper)
     {
         _blobUri = configuration["BlobStorage:Uri"];
         _blobContainer = configuration["BlobStorage:Container"];
@@ -31,38 +33,33 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
         _ttsRegion = configuration["Azure:Region"];
         _azureTextToSpeechClient = azureTextToSpeechClient;
         _keywordEntityRepository = keywordEntityRepository;
+        _mapper = mapper;
     }
     
-    public async Task ConvertTextToSpeech(Guid videoId)
+    public async Task<Keyword> CreateAudio(Guid keywordId)
     {
         var voicesList = await _azureTextToSpeechClient.GetAllVoicesAsync(_ttsSubscriptionKey);
 
-        var videoKeywords = _keywordEntityRepository.GetAllKeywordsByVideoId(videoId, int.MaxValue, 0);
+        var keyword = _keywordEntityRepository.GetById(keywordId);
 
-        if (videoKeywords.keywords == null || videoKeywords.keywords.Count == 0)
-            return;
-
-        var keywordsLanguage = videoKeywords.keywords.First().Language;
+        var keywordLanguage = keyword.Language;
 
         var speechConfig = SpeechConfig.FromSubscription(_ttsSubscriptionKey, _ttsRegion);
         speechConfig.SpeechSynthesisVoiceName = voicesList
-            .First(a => a.Locale == keywordsLanguage && a.Gender == "Female").ShortName;
+            .First(a => a.Locale == keywordLanguage && a.Gender == "Female").ShortName;
 
         var containerClient = new BlobContainerClient(_blobUri, _blobContainer);
 
         using (var synthesizer = new SpeechSynthesizer(speechConfig, null))
         {
-            var currentKeyword = new KeywordEntity();
-
-            var synthesisCompleted = false;
+            await synthesizer.SpeakTextAsync(keyword.Content);
 
             synthesizer.SynthesisCompleted += async (o, e) =>
             {
-                synthesisCompleted = true;
                 var audioBuffer = e.Result.AudioData;
 
                 MemoryStream audioStream = new MemoryStream(audioBuffer);
-                var blobClient = containerClient.GetBlobClient($"{currentKeyword.Content}.wav");
+                var blobClient = containerClient.GetBlobClient($"{keyword.Content}.wav");
 
                 BlobHttpHeaders blobHttpHeaders = new BlobHttpHeaders()
                 {
@@ -76,7 +73,7 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
                     
                     var audioSasLink = await CreateServiceSASBlob(blobClient);
 
-                    currentKeyword.AudioLink = audioSasLink.ToString();
+                    keyword.AudioLink = audioSasLink.ToString();
                 }
                 catch (Exception exception)
                 {
@@ -84,7 +81,7 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
                     throw;
                 }
 
-                _keywordEntityRepository.Update(currentKeyword, "system");
+                _keywordEntityRepository.Update(keyword, "system");
                 _keywordEntityRepository.SaveAndStopTracking();
             };
 
@@ -95,21 +92,10 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
 
                 throw new Exception(cancellation.ErrorDetails);
             };
-
-            foreach (var keyword in videoKeywords.keywords)
-            {
-                currentKeyword = keyword;
-
-                synthesisCompleted = false;
-
-                await synthesizer.SpeakTextAsync(keyword.Content);
-
-                while (!synthesisCompleted)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                }
-            }
         }
+
+        var updatedKeyword = _keywordEntityRepository.GetById(keywordId);
+        return _mapper.Map<Keyword>(updatedKeyword);
     }
 
     private async Task<Uri> CreateServiceSASBlob(
