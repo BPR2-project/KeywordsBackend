@@ -12,6 +12,20 @@ namespace Keywords.Tests;
 public class IndexerServiceUnitTest : TestFixture
 {
     [Fact]
+    public void Can_Create_Indexer_Entity()
+    {
+        var repository = Mock<IIndexerEntityRepository>();
+        var videoId = A<Guid>();
+        var response = A<IndexVideoReceipt>();
+        var sut = A<IndexerService>();
+
+        sut.CreateIndexerEntity(videoId, response);
+
+        repository.Verify(r => r.Insert(It.Is<IndexerEntity>(x => x.Id == videoId), "email"), Times.Once);
+        repository.Verify(r => r.Save(), Times.Once);
+    }
+    
+    [Fact]
     public void Entity_Can_Be_Updated_To_ExtractingKeyPhrases()
     {
         var repository = Mock<IIndexerEntityRepository>();
@@ -29,7 +43,7 @@ public class IndexerServiceUnitTest : TestFixture
     }
     
     [Fact]
-    public void Can_Intersect_Key_Phrases_Response()
+    public void Can_Update_Entity_To_Succeeded()
     {
         var indexerRepository= Mock<IIndexerEntityRepository>();
         var keywordsRepository = Mock<IKeywordEntityRepository>();
@@ -45,18 +59,24 @@ public class IndexerServiceUnitTest : TestFixture
         indexerRepository.Verify(r=> r.Save(), Times.Once);
         entity.State.Should().Be(IndexerState.Succeeded);
     }
-
+    
     [Fact]
-    public void Can_Create_Indexer_Entity()
+    public void Can_Update_Entity_To_Failed()
     {
-        var repository = Mock<IIndexerEntityRepository>();
-        var videoId = A<Guid>();
-        var response = A<IndexVideoReceipt>();
+        var indexerRepository= Mock<IIndexerEntityRepository>();
+        var keywordsRepository = Mock<IKeywordEntityRepository>();
+        var entity = A<IndexerEntity>();
+        entity.State = IndexerState.ExtractingKeyPhrases;
         var sut = A<IndexerService>();
+        var intersection = new List<string>();
 
-        sut.CreateIndexerEntity(videoId, response);
-
-        repository.Verify(r => r.Insert(It.Is<IndexerEntity>(x => x.Id == videoId), "email"), Times.Once);
-        repository.Verify(r => r.Save(), Times.Once);
+        
+        sut.UpdateToFailed(entity);
+        
+        indexerRepository.Verify(r => r.Update(entity, "email"), Times.Once);
+        indexerRepository.Verify(r=> r.Save(), Times.Once);
+        entity.State.Should().Be(IndexerState.Failed);
     }
+
+
 }

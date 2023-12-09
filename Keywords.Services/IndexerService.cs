@@ -167,7 +167,7 @@ public class IndexerService : IIndexerService
         return _mapper.Map<IndexerProgress>(entity);
     }
 
-    private  IEnumerable<string> IntersectKeyPhrases(IndexerEntity entity, IReadOnlyList<Documents>? documents)
+    public  IEnumerable<string> IntersectKeyPhrases(IndexerEntity entity, IReadOnlyList<Documents>? documents)
     {
         if (documents?.Count != 2)
         {
@@ -206,7 +206,7 @@ public class IndexerService : IIndexerService
         _indexerEntityRepository.Save();
     }
     
-    private void UpdateToFailed(IndexerEntity entity)
+    public void UpdateToFailed(IndexerEntity entity)
     {
         entity.State = IndexerState.Failed;
         _indexerEntityRepository.Update(entity, "email");

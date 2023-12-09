@@ -21,7 +21,7 @@ public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplic
     }
     
     [Fact]
-    public async Task PostIndexVideo_ShouldBeSuccessful()
+    public async Task Can_Post_To_Video_Indexer()
     {
         // Arrange
         var testVideoUrl = A<Uri>();
@@ -40,7 +40,7 @@ public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplic
     }
 
     [Fact]
-    public async Task GetIndexVideoProgress_Successful()
+    public async Task Can_Get_Index_Progress()
     {
         // Arrange
         var testVideoId = A<Guid>();
@@ -61,7 +61,7 @@ public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplic
     }
 
     [Fact]
-    public async Task PostJobRequestToKeyPhrase_Successful()
+    public async Task? Can_Create_Job_For_KeyPhrase_Extractor()
     {
         // Arrange
         var testVideoId = A<Guid>();
@@ -82,7 +82,7 @@ public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplic
     }
 
     [Fact]
-    public async Task GetJobResultFromKeyPhrase_Successful()
+    public async Task Can_Get_Job_Result_From_KeyPhrase()
     {
         // Arrange
         var testVideoId = A<Guid>();
