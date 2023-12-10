@@ -4,20 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Keywords.API.Controllers;
 
-public class AzureSpeechToTextController: SpeechControllerBase
+public class SpeechToTextController: SpeechControllerBase
 {
-    private readonly IAzureSpeechToTextService _azureSpeechToTextService;
+    private readonly ISpeechToTextService _speechToTextService;
     
-    public AzureSpeechToTextController(IAzureSpeechToTextService azureSpeechToTextService)
+    public SpeechToTextController(ISpeechToTextService speechToTextService)
     {
-        _azureSpeechToTextService = azureSpeechToTextService;
+        _speechToTextService = speechToTextService;
     }
 
     public override Task<ActionResult<PronunciationAssessmentResponseDTO>> CreatePronunciationAssessment(IFormFile body, string language, string referenceText)
     {
         return Task.Run<ActionResult<PronunciationAssessmentResponseDTO>>(async () =>
         {
-            PronunciationAssessmentResponseDTO response = await _azureSpeechToTextService.CreatePronunciationAssessment(
+            PronunciationAssessmentResponseDTO response = await _speechToTextService.CreatePronunciationAssessment(
                 language, referenceText, body);
             return Ok(response);
         });

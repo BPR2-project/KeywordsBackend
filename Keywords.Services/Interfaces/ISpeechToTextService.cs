@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Keywords.Services.Interfaces;
 
-public interface IAzureSpeechToTextService
+public interface ISpeechToTextService
 {
     Task<PronunciationAssessmentResponseDTO> CreatePronunciationAssessment(string language, string referenceText, IFormFile file);
 }

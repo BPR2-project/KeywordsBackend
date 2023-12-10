@@ -7,13 +7,13 @@ using Microsoft.Extensions.Configuration;
 using speechToText_api;
 namespace Keywords.Services;
 
-public class AzureSpeechToTextService : IAzureSpeechToTextService
+public class SpeechToTextService : ISpeechToTextService
 {
     private readonly IAzureSpeechToTextClient _azureSpeechToTextClient;
     private IMapper _mapper;
     private string _sttSubscriptionKey;
     
-    public AzureSpeechToTextService(IAzureSpeechToTextClient azureSpeechToTextClient, IMapper mapper, 
+    public SpeechToTextService(IAzureSpeechToTextClient azureSpeechToTextClient, IMapper mapper, 
         IConfiguration configuration)
     {
         _azureSpeechToTextClient = azureSpeechToTextClient;
