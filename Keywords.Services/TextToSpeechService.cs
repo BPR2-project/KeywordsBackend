@@ -60,7 +60,7 @@ public class TextToSpeechService : ITextToSpeechService
         {
             var synthesisCompleted = false;
             
-            synthesizer.SynthesisCompleted += async (o, e) =>
+            synthesizer.SynthesisCompleted += async (_, e) =>
             {
                 var audioBuffer = e.Result.AudioData;
 
@@ -93,7 +93,7 @@ public class TextToSpeechService : ITextToSpeechService
                 }
             };
             
-            synthesizer.SynthesisCanceled += (o, e) =>
+            synthesizer.SynthesisCanceled += (_, e) =>
             {
                 var cancellation = SpeechSynthesisCancellationDetails.FromResult(e.Result);
 
