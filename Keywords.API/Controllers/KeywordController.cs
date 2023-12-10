@@ -8,12 +8,12 @@ namespace Keywords.API.Controllers;
 public class KeywordController: KeywordControllerBase
 {
     private readonly IKeywordService _keywordService;
-    private readonly IAzureTextToSpeechService _azureTextToSpeechService;
+    private readonly ITextToSpeechService _textToSpeechService;
 
-    public KeywordController(IKeywordService keywordService, IAzureTextToSpeechService azureTextToSpeechService)
+    public KeywordController(IKeywordService keywordService, ITextToSpeechService textToSpeechService)
     {
         _keywordService = keywordService;
-        _azureTextToSpeechService = azureTextToSpeechService;
+        _textToSpeechService = textToSpeechService;
     }
 
     public override Task<ActionResult<PaginatedKeywordsResponse>> GetAllKeywordsByVideoId(PaginatedKeywordsRequest paginatedKeywordsRequest)

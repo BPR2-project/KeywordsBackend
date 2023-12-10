@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Keywords.API.Controllers;
 
-public class AzureTextToSpeechController : TextToSpeechControllerBase
+public class TextToSpeechController : TextToSpeechControllerBase
 {
-    private readonly IAzureTextToSpeechService _azureTextToSpeechService;
+    private readonly ITextToSpeechService _textToSpeechService;
     private readonly IKeywordService _keywordService;
 
-    public AzureTextToSpeechController(IAzureTextToSpeechService azureTextToSpeechService, IKeywordService keywordService)
+    public TextToSpeechController(ITextToSpeechService textToSpeechService, IKeywordService keywordService)
     {
-        _azureTextToSpeechService = azureTextToSpeechService;
+        _textToSpeechService = textToSpeechService;
         _keywordService = keywordService;
     }
 
@@ -23,7 +23,7 @@ public class AzureTextToSpeechController : TextToSpeechControllerBase
             if (keyword == null)
                 return NotFound();
             
-            var updatedKeyword = await _azureTextToSpeechService.CreateAudio(id);
+            var updatedKeyword = await _textToSpeechService.CreateAudio(id);
             return Ok(updatedKeyword);
         });
     }

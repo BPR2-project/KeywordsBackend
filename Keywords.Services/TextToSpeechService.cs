@@ -12,7 +12,7 @@ using Microsoft.CognitiveServices.Speech;
 
 namespace Keywords.Services;
 
-public class AzureTextToSpeechService : IAzureTextToSpeechService
+public class TextToSpeechService : ITextToSpeechService
 {
     private readonly IKeywordEntityRepository _keywordEntityRepository;
     private readonly IAzureTextToSpeechClient _azureTextToSpeechClient;
@@ -22,7 +22,7 @@ public class AzureTextToSpeechService : IAzureTextToSpeechService
     private readonly string _blobUri;
     private readonly string _blobContainer;
 
-    public AzureTextToSpeechService(IAzureTextToSpeechClient azureTextToSpeechClient,
+    public TextToSpeechService(IAzureTextToSpeechClient azureTextToSpeechClient,
         IKeywordEntityRepository keywordEntityRepository, IConfiguration configuration, IMapper mapper)
     {
         _blobUri = configuration["BlobStorage:Uri"];

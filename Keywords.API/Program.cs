@@ -32,8 +32,8 @@ builder.Services.AddScoped<IIndexerEntityRepository, IndexerEntityRepository>();
 // Services
 builder.Services.AddScoped<IKeywordService, KeywordService>();
 builder.Services.AddScoped<IIndexerService, IndexerService>();
-builder.Services.AddScoped<IAzureTextToSpeechService, AzureTextToSpeechService>();
-builder.Services.AddScoped<IAzureSpeechToTextService, AzureSpeechToTextService>();
+builder.Services.AddScoped<ITextToSpeechService, TextToSpeechService>();
+builder.Services.AddScoped<ISpeechToTextService, SpeechToTextService>();
 
 // Mapper
 builder.Services.AddAutoMapper(typeof(BaseProfile));
