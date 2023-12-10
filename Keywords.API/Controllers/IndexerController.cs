@@ -7,12 +7,10 @@ namespace Keywords.API.Controllers;
 public class IndexerController : IndexerControllerBase
 {
     private readonly IIndexerService _indexerService;
-    private readonly ILogger<IndexerController> _logger;
 
-    public IndexerController(IIndexerService indexerService, ILogger<IndexerController> logger)
+    public IndexerController(IIndexerService indexerService)
     {
         _indexerService = indexerService;
-        _logger = logger;
     }
     
     public override async Task<ActionResult<IndexerProgress>> GetIndexerProgress(Guid videoId)

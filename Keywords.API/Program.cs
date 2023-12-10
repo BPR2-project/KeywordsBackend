@@ -6,7 +6,6 @@ using Keywords.Mappers;
 using Keywords.Services;
 using Keywords.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using speechToText_api;
 using textToSpeech_api;
 
@@ -18,7 +17,6 @@ builder.Services.AddScoped<IAzureTextToSpeechClient>(_ => new AzureTextToSpeechC
 builder.Services.AddScoped<IKeyPhraseClient>(_ => new KeyPhraseClient(builder.Configuration["KeyPhrase:BaseUrl"]));
 builder.Services.AddScoped<IAzureSpeechToTextClient>(_ => new AzureSpeechToTextClient(builder.Configuration["SpeechToText:BaseUrl"]));
 
-Console.WriteLine("-------------- Does this work? --------------" + builder.Configuration["Indexer:BaseUrl"]);
 var dbConnectionString = builder.Configuration.GetConnectionString("KeywordsDb");
 
 // Add services to the container.
@@ -41,10 +39,7 @@ builder.Services.AddAutoMapper(typeof(BaseProfile));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });                
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

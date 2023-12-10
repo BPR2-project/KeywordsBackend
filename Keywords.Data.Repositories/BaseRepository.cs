@@ -139,29 +139,4 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
 
         return entities.ToList();
     }
-
-    public virtual void SystemUpdateEmail(string oldEmail, string newEmail)
-    {
-        var createdByToUpdate = DbSet.Where(a => a.CreatedBy == oldEmail).ToList();
-        var updatedByToUpdate = DbSet.Where(a => a.UpdatedBy == oldEmail).ToList();
-        var destroyedByToUpdate = DbSet.Where(a => a.DestroyedBy == oldEmail).ToList();
-
-        createdByToUpdate.ForEach(a =>
-        {
-            a.CreatedBy = newEmail;
-            Context.Entry(a).State = EntityState.Modified;
-        });
-
-        updatedByToUpdate.ForEach(a =>
-        {
-            a.UpdatedBy = newEmail;
-            Context.Entry(a).State = EntityState.Modified;
-        });
-
-        destroyedByToUpdate.ForEach(a =>
-        {
-            a.DestroyedBy = newEmail;
-            Context.Entry(a).State = EntityState.Modified;
-        });
-    }
 }

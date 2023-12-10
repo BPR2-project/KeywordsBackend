@@ -10,8 +10,8 @@ namespace Keywords.Services;
 public class SpeechToTextService : ISpeechToTextService
 {
     private readonly IAzureSpeechToTextClient _azureSpeechToTextClient;
-    private IMapper _mapper;
-    private string _sttSubscriptionKey;
+    private readonly IMapper _mapper;
+    private readonly string _sttSubscriptionKey;
     
     public SpeechToTextService(IAzureSpeechToTextClient azureSpeechToTextClient, IMapper mapper, 
         IConfiguration configuration)

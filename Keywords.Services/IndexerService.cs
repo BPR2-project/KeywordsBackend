@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using AutoMapper;
+﻿using AutoMapper;
 using indexer_api;
 using Keywords.API.Swagger.Controllers.Generated;
 using Keywords.Data;
