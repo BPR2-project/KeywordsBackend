@@ -35,6 +35,18 @@ public class IndexerService : IIndexerService
         _indexerAccountId = configuration["Indexer:AccountId"];
         _keyPhraseApiKey = configuration["KeyPhrase:ApiKey"];
     }
+    
+    public async Task IndexVideoAsync(Guid videoId, string url)
+    {
+        var accountInfo = await GetAccountInfoAsync();
+
+        var videoName = videoId.ToString();
+        var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
+            accountInfo.AccessToken, videoName, url, "private", "da-DK", "da-DK",
+            new[] { "Faces", "ObservedPeople", "Emotions", "Labels" });
+
+        CreateIndexerEntity(videoId, response);
+    }
 
     public async Task<IndexerProgress?> GetIndexerProgressAsync(Guid videoId)
     {
@@ -56,47 +68,15 @@ public class IndexerService : IIndexerService
 
         return _mapper.Map<IndexerProgress>(entity);
     }
-
-    private async Task<IndexerProgress?> GetKeyPhraseResultAsync(IndexerEntity entity)
-    {
-        var response = await _keyPhraseClient.GetJobResultAsync(_keyPhraseApiKey, entity.KeyPhraseJobId);
-        if (response.Result?.Status != "succeeded")
-        {
-            return _mapper.Map<IndexerProgress>(entity);
-        }
-
-        var documents = response.Result.Tasks?.Items?.FirstOrDefault()?.Results?.Documents?.ToList();
-        if (documents?.Count != 2)
-        {
-            throw new Exception("Unexpected number of documents");
-        }
-
-        var ocrKeyPhrases = documents[0].KeyPhrases;
-        var transcriptKeyPhrases = documents[1].KeyPhrases;
-        var keyPhraseIntersection = transcriptKeyPhrases.OrderByDescending(trans =>
-                ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans)))
-            .Take(50).ToList();
         
-        keyPhraseIntersection = keyPhraseIntersection.ConvertAll(text => Regex.Replace(text, "^[a-z]", c => c.Value.ToUpper()));
+    private async Task<AccountInfo> GetAccountInfoAsync()
+    {
+        var accountInfos = await _indexerClient.GetTokenAsync(_indexerApiKey);
 
-        var keywords = keyPhraseIntersection.Select(x => new KeywordEntity
-        {
-            Content = x,
-            VideoId = entity.Id,
-            Language = "da-DK",
-            AudioLink = ""
-        }).ToList();
-
-        _keywordEntityRepository.InsertRange(keywords, "email");
-        _keywordEntityRepository.Save();
-
-        entity.State = IndexerState.Succeeded;
-        _indexerEntityRepository.Update(entity, "email");
-        _indexerEntityRepository.Save();
-
-        return _mapper.Map<IndexerProgress>(entity);
+        var accountInfo = accountInfos?.FirstOrDefault(x => x.Id == _indexerAccountId);
+        return accountInfo ?? throw new Exception("No account found");
     }
-
+    
     private async Task<IndexerProgress> GetIndexerResultAsync(IndexerEntity entity)
     {
         var video = await GetIndexerOutputAsync(entity);
@@ -105,18 +85,28 @@ public class IndexerService : IIndexerService
             return _mapper.Map<IndexerProgress>(video);
         }
 
-        var job = await CreateJobRequest(video);
-
-        entity.State = IndexerState.ExtractingKeyPhrases;
-        entity.KeyPhraseJobId = job;
-
-        _indexerEntityRepository.Update(entity, "email");
-        _indexerEntityRepository.Save();
-
+        var job = await CreateKeyPhraseJob(video);
+        UpdateToExtractKeyPhrases(entity, job);
         return _mapper.Map<IndexerProgress>(entity);
     }
+    
+    private async Task<Video> GetIndexerOutputAsync(IndexerEntity entity)
+    {
+        var accountInfo = await GetAccountInfoAsync();
+        var response = await _indexerClient.GetIndexerOutputAsync(accountInfo.Location, accountInfo.Id,
+            entity.IndexerId,
+            accountInfo.AccessToken);
+        var video = response?.Videos?.FirstOrDefault();
 
-    private async Task<string?> CreateJobRequest(Video video)
+        if (video == null)
+        {
+            throw new Exception("No Indexer output found");
+        }
+
+        return video;
+    }
+    
+    private async Task<string?> CreateKeyPhraseJob(Video video)
     {
         var request = CreateKeyPhraseRequest(video);
         var jobResponse = await _keyPhraseClient.CreateJobAsync(_keyPhraseApiKey, request);
@@ -156,32 +146,48 @@ public class IndexerService : IIndexerService
         };
         return request;
     }
-
-    private async Task<Video> GetIndexerOutputAsync(IndexerEntity entity)
+    
+    private async Task<IndexerProgress?> GetKeyPhraseResultAsync(IndexerEntity entity)
     {
-        var accountInfo = await GetAccountInfoAsync();
-        var response = await _indexerClient.GetIndexerOutputAsync(accountInfo.Location, accountInfo.Id,
-            entity.IndexerId,
-            accountInfo.AccessToken);
-        var video = response?.Videos?.FirstOrDefault();
+        var response = await _keyPhraseClient.GetJobResultAsync(_keyPhraseApiKey, entity.KeyPhraseJobId);
+        var status = response.Result?.Status;
 
-        if (video == null)
+        switch (status)
         {
-            throw new Exception("No Indexer output found");
+            case "succeeded":
+                var documents = response.Result?.Tasks?.Items?.FirstOrDefault()?.Results?.Documents?.ToList();
+                var keyPhraseIntersection = IntersectKeyPhrases(entity, documents);
+                UpdateToSucceeded(entity, keyPhraseIntersection);               
+                break;
+            case "cancelled":
+            case "failed":
+                UpdateToFailed(entity);
+                break;
         }
-
-        return video;
+        return _mapper.Map<IndexerProgress>(entity);
     }
 
-    public async Task IndexVideoAsync(Guid videoId, string url)
+    public  IEnumerable<string> IntersectKeyPhrases(IndexerEntity entity, IReadOnlyList<Documents>? documents)
     {
-        var accountInfo = await GetAccountInfoAsync();
+        if (documents?.Count != 2)
+        {
+            UpdateToFailed(entity);
+            return new List<string>();
+        }
 
-        var videoName = videoId.ToString();
-        var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
-            accountInfo.AccessToken, videoName, url, "private", "da-DK", "da-DK",
-            new[] { "Faces", "ObservedPeople", "Emotions", "Labels" });
+        var ocrKeyPhrases = documents[0].KeyPhrases;
+        var transcriptKeyPhrases = documents[1].KeyPhrases;
 
+        var keyPhraseIntersection = transcriptKeyPhrases.OrderByDescending(trans =>
+                ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans)))
+            .Take(50).ToList();
+        
+       return keyPhraseIntersection.ConvertAll(text => char.ToUpper(text[0]) + text[1..]);
+       
+    }
+    
+    public void CreateIndexerEntity(Guid videoId, IndexVideoReceipt? response)
+    {
         if (response == null)
         {
             throw new Exception("No Indexer output found");
@@ -192,12 +198,38 @@ public class IndexerService : IIndexerService
             "email");
         _indexerEntityRepository.Save();
     }
-
-    private async Task<AccountInfo> GetAccountInfoAsync()
+    
+    public void UpdateToExtractKeyPhrases(IndexerEntity entity, string? job)
     {
-        var accountInfos = await _indexerClient.GetTokenAsync(_indexerApiKey);
+        entity.State = IndexerState.ExtractingKeyPhrases;
+        entity.KeyPhraseJobId = job;
 
-        var accountInfo = accountInfos?.FirstOrDefault(x => x.Id == _indexerAccountId);
-        return accountInfo ?? throw new Exception("No account found");
+        _indexerEntityRepository.Update(entity, "email");
+        _indexerEntityRepository.Save();
+    }
+    
+    public void UpdateToFailed(IndexerEntity entity)
+    {
+        entity.State = IndexerState.Failed;
+        _indexerEntityRepository.Update(entity, "email");
+        _indexerEntityRepository.Save();
+    }
+
+    public void UpdateToSucceeded(IndexerEntity entity, IEnumerable<string> keyPhraseIntersection)
+    {
+        var keywords = keyPhraseIntersection.Select(x => new KeywordEntity
+        {
+            Content = x,
+            VideoId = entity.Id,
+            Language = "da-DK",
+            AudioLink = ""
+        }).ToList();
+
+        _keywordEntityRepository.InsertRange(keywords, "email");
+        _keywordEntityRepository.Save();
+
+        entity.State = IndexerState.Succeeded;
+        _indexerEntityRepository.Update(entity, "email");
+        _indexerEntityRepository.Save();
     }
 }
