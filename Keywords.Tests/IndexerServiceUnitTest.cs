@@ -12,6 +12,91 @@ namespace Keywords.Tests;
 public class IndexerServiceUnitTest : TestFixture
 {
     [Fact]
+    public void Fails_To_Intersect_Zero_Documents()
+    {
+        var repository = Mock<IIndexerEntityRepository>();
+        var entity = A<IndexerEntity>();
+        entity.State = IndexerState.ExtractingKeyPhrases;
+        var sut = A<IndexerService>();
+        var documents = CreateMany<Documents>(0);
+        
+        var result = sut.IntersectKeyPhrases(entity, documents).ToList();
+        
+        repository.Verify(r => r.Update(entity, "email"), Times.Once);
+        result.Count.Should().Be(0);
+        entity.State.Should().Be(IndexerState.Failed);
+    }
+    
+    [Fact]
+    public void Fails_To_Intersect_One_Document()
+    {
+        var repository = Mock<IIndexerEntityRepository>();
+        var entity = A<IndexerEntity>();
+        entity.State = IndexerState.ExtractingKeyPhrases;
+        var sut = A<IndexerService>();
+        var document = Freeze<Documents>();
+        document.KeyPhrases = CreateMany<string>(50);
+        var documents = CreateMany<Documents>(1);
+        
+        var result = sut.IntersectKeyPhrases(entity, documents).ToList();
+        
+        repository.Verify(r => r.Update(entity, "email"), Times.Once);
+        result.Count.Should().Be(0);
+        entity.State.Should().Be(IndexerState.Failed);
+        
+    }
+    
+    [Fact]
+    public void Can_Intersect_Two_Documents()
+    {
+        var entity = A<IndexerEntity>();
+        entity.State = IndexerState.ExtractingKeyPhrases;
+        var sut = A<IndexerService>();
+        var document = Freeze<Documents>();
+        document.KeyPhrases = CreateMany<string>(50);
+        var documents = CreateMany<Documents>(2);
+        
+        var result = sut.IntersectKeyPhrases(entity, documents).ToList();
+        
+        result.Count.Should().Be(50);
+        entity.State.Should().Be(IndexerState.ExtractingKeyPhrases);
+    }
+    
+    [Fact]
+    public void Fails_To_Intersect_May_Documents()
+    {
+        var repository = Mock<IIndexerEntityRepository>();
+        var entity = A<IndexerEntity>();
+        entity.State = IndexerState.ExtractingKeyPhrases;
+        var sut = A<IndexerService>();
+        var document = Freeze<Documents>();
+        document.KeyPhrases = CreateMany<string>(50);
+        var documents = CreateMany<Documents>(10);
+        
+        var result = sut.IntersectKeyPhrases(entity, documents).ToList();
+        
+        repository.Verify(r => r.Update(entity, "email"), Times.Once);
+        result.Count.Should().Be(0);
+        entity.State.Should().Be(IndexerState.Failed);
+        
+    }
+    
+    [Fact]
+    public void Can_UpperCase_Intersect_Results()
+    {
+        var entity = A<IndexerEntity>();
+        entity.State = IndexerState.ExtractingKeyPhrases;
+        var sut = A<IndexerService>();
+        var document = Freeze<Documents>();
+        document.KeyPhrases = new[] {"keyphrase", "1234"};
+        var documents = CreateMany<Documents>(2);
+        
+        var result = sut.IntersectKeyPhrases(entity, documents).ToList();
+        
+        result.First().Should().StartWith("K");
+        result.Last().Should().StartWith("1");
+    }
+    [Fact]
     public void Can_Create_Indexer_Entity()
     {
         var repository = Mock<IIndexerEntityRepository>();

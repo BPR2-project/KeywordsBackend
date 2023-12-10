@@ -172,6 +172,7 @@ public class IndexerService : IIndexerService
         if (documents?.Count != 2)
         {
             UpdateToFailed(entity);
+            return new List<string>();
         }
 
         var ocrKeyPhrases = documents[0].KeyPhrases;
@@ -180,8 +181,9 @@ public class IndexerService : IIndexerService
         var keyPhraseIntersection = transcriptKeyPhrases.OrderByDescending(trans =>
                 ocrKeyPhrases.Count(ocr => string.Equals(ocr, trans)))
             .Take(50).ToList();
-
-        return keyPhraseIntersection.ConvertAll(text => Regex.Replace(text, "^[a-z]", c => c.Value.ToUpper()));
+        
+       return keyPhraseIntersection.ConvertAll(text => char.ToUpper(text[0]) + text[1..]);
+       
     }
     
     public void CreateIndexerEntity(Guid videoId, IndexVideoReceipt? response)
