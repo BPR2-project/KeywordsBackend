@@ -119,7 +119,7 @@ namespace Keywords.API.Swagger.Controllers.Generated
         /// <param name="id">id of the keyword</param>
         /// <returns>Audio was generated successfully</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("text/audio/{id}")]
-        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Keyword>> CreateAudio([Microsoft.AspNetCore.Mvc.FromQuery] [Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid id);
+        public abstract System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<Keyword>> CreateAudio([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] System.Guid id);
 
     }
 

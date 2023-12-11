@@ -178,7 +178,7 @@ paths:
       operationId: "CreateAudio"
       parameters:
         - name: id
-          in: query
+          in: path
           description: id of the keyword 
           required: true
           schema:
