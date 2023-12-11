@@ -9,7 +9,7 @@ using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using Xunit;
 
-namespace Keywords.Tests.Integration;
+namespace Keywords.Tests.Integration.Controller;
 
 public class IndexerIntegrationTest : TestFixture, IClassFixture<CustomWebApplicationFactory>
 {
