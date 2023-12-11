@@ -3,7 +3,6 @@ using indexer_api;
 using Keywords.Data;
 using Keywords.Data.Repositories.Interfaces;
 using Keywords.Services;
-using Keywords.Tests.Integration;
 using Moq;
 using Xunit;
 
