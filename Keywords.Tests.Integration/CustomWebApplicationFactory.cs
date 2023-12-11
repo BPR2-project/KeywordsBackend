@@ -14,19 +14,22 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     public readonly Mock<IKeywordEntityRepository> KeywordsRepositoryMock = new();
     public readonly Mock<IIndexerEntityRepository> IndexerRepositoryMock = new();
+    public readonly WireMockServer SpeechToTextMockServer = WireMockServer.Start();
     public readonly WireMockServer IndexerMockServer = WireMockServer.Start();
     public readonly WireMockServer KeyPhraseMockServer = WireMockServer.Start();
 
+    public readonly string SpeechToTextKey;
     public readonly string IndexerAccountId;
-    public readonly string KeyPhraseApiKey;
+    private readonly string _keyPhraseApiKey;
     
     private readonly IFixture _fixture = new Fixture().Customize(new AutoMoqCustomization());
     private T A<T>() => _fixture.Create<T>();
     
     public CustomWebApplicationFactory()
     {
+        SpeechToTextKey = A<string>();
         IndexerAccountId = A<string>();
-        KeyPhraseApiKey = A<string>();
+        _keyPhraseApiKey = A<string>();
     }
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -37,7 +40,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             { "Indexer:BaseUrl", IndexerMockServer.Url },
             { "Indexer:AccountId", IndexerAccountId },
             { "KeyPhrase:BaseUrl", KeyPhraseMockServer.Url },
-            { "KeyPhrase:ApiKey", KeyPhraseApiKey }
+            { "KeyPhrase:ApiKey", _keyPhraseApiKey },
+            { "SpeechToText:BaseUrl", SpeechToTextMockServer.Url },
+            { "SpeechToText:Key", SpeechToTextKey }
         };
   
         var configuration = new ConfigurationBuilder()

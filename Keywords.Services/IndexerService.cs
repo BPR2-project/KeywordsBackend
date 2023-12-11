@@ -43,8 +43,22 @@ public class IndexerService : IIndexerService
         var response = await _indexerClient.IndexVideoAsync(accountInfo.Location, accountInfo.Id,
             accountInfo.AccessToken, videoName, url, "private", "da-DK", "da-DK",
             new[] { "Faces", "ObservedPeople", "Emotions", "Labels" });
+        
+        var exits = _indexerEntityRepository.GetById(videoId);
+        
+        if (exits == null)
+        {
+            CreateIndexerEntity(videoId, response);
+        }
 
-        CreateIndexerEntity(videoId, response);
+        if (exits.State == IndexerState.Failed)
+        {
+            exits.IndexerId = response.Id;
+            exits.State = IndexerState.Indexing;
+            exits.KeyPhraseJobId = null;
+            _indexerEntityRepository.Update(exits, "email");
+            _indexerEntityRepository.Save();
+        }
     }
 
     public async Task<IndexerProgress?> GetIndexerProgressAsync(Guid videoId)
