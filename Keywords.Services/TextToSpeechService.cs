@@ -38,11 +38,6 @@ public class TextToSpeechService : ITextToSpeechService
     {
         var voicesList = await _azureTextToSpeechClient.GetAllVoicesAsync(_ttsSubscriptionKey);
 
-        var exists = _keywordEntityRepository.ExistsById(keywordId);
-
-        if (!exists)
-            return null;
-
         var keywordEntity = _keywordEntityRepository.GetById(keywordId);
 
         if (!string.IsNullOrEmpty(keywordEntity.AudioLink))

@@ -3,7 +3,7 @@ using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
 using Moq;
 
-namespace Keywords.Tests.Integration;
+namespace Keywords.Tests;
 
 public abstract class TestFixture
 {
