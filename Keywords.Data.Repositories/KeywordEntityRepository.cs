@@ -63,4 +63,10 @@ public class KeywordEntityRepository: BaseRepository<KeywordEntity>, IKeywordEnt
 
         return (query.ToList(), totalSize);
     }
+
+    public override void InsertRange(IEnumerable<KeywordEntity> entities, string email)
+    {
+        entities = entities.Where(x => !DbSet.Any(d => d.VideoId == x.VideoId && d.Content == x.Content));
+        base.InsertRange(entities, email);
+    }
 }
