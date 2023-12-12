@@ -67,7 +67,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         return query.ToList();
     }
 
-    public virtual TEntity GetById(Guid id)
+    public virtual TEntity? GetById(Guid id)
     {
         var query = GetQueryWithAllIncludes();
 
@@ -127,7 +127,7 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
     }
 
     public abstract IQueryable<TEntity> GetQueryWithAllIncludes();
-    public abstract TEntity CheckSoftDelete(TEntity entity);
+    public abstract TEntity CheckSoftDelete(TEntity? entity);
 
     public List<TEntity> CheckSoftDelete(TEntity[]? entities)
     {
