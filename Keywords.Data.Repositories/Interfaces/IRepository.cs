@@ -43,7 +43,7 @@ public interface IRepository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="id">ID of Entity</param>
     /// <returns>Returns entity if found, null if not</returns>
-    TEntity GetById(Guid id);
+    TEntity? GetById(Guid id);
 
     /// <summary>
     ///     Inserts an entity
