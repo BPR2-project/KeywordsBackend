@@ -40,7 +40,7 @@ public class TextToSpeechService : ITextToSpeechService
         if (!string.IsNullOrEmpty(keywordEntity.AudioLink))
             return _mapper.Map<Keyword>(keywordEntity);
 
-        using (var voicesFetcher = new SpeechSynthesizer(speechConfig))
+        using (var voicesFetcher = new SpeechSynthesizer(speechConfig, null))
         {
             var keywordLanguage = keywordEntity.Language;
             var voicesList = await voicesFetcher.GetVoicesAsync(keywordLanguage);
