@@ -33,7 +33,9 @@ public class TextToSpeechService : ITextToSpeechService
 
     public async Task<Keyword?> CreateAudio(Guid keywordId)
     {
-        var speechConfig = SpeechConfig.FromSubscription(_ttsSubscriptionKey, _ttsRegion);
+        var authorizationToken = await GetToken(_ttsSubscriptionKey, _ttsRegion);
+        var speechConfig = SpeechConfig.FromAuthorizationToken(authorizationToken, _ttsRegion);
+        // var speechConfig = SpeechConfig.FromSubscription(_ttsSubscriptionKey, _ttsRegion);
 
         var keywordEntity = _keywordEntityRepository.GetById(keywordId);
 
@@ -137,6 +139,28 @@ public class TextToSpeechService : ITextToSpeechService
         {
             // Client object is not authorized via Shared Key
             return null;
+        }
+    }
+    
+    public static async Task<string> GetToken(string subscriptionKey, string region)
+    {
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+            UriBuilder uriBuilder = new UriBuilder("https://" + region + ".api.cognitive.microsoft.com/sts/v1.0/issueToken");
+
+            using (var result = await client.PostAsync(uriBuilder.Uri.AbsoluteUri, null))
+            {
+                Console.WriteLine("Token Uri: {0}", uriBuilder.Uri.AbsoluteUri);
+                if (result.IsSuccessStatusCode)
+                {
+                    return await result.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    throw new HttpRequestException($"Cannot get token from {uriBuilder.ToString()}. Error: {result.StatusCode}");
+                }
+            }
         }
     }
 }
