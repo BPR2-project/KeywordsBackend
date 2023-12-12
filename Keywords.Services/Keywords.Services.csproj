@@ -4,6 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <UserSecretsId>18ea4c08-0bb7-4696-b41c-508b0d888e31</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,7 +20,6 @@
       <ProjectReference Include="..\Keywords.Data.Repositories\Keywords.Data.Repositories.csproj" />
       <ProjectReference Include="..\Keywords.Extensions\Keywords.Extensions.csproj" />
       <ProjectReference Include="..\SpeechToText\SpeechToText.csproj" />
-      <ProjectReference Include="..\TextToSpeech\TextToSpeech.csproj" />
       <ProjectReference Include="..\SpeechToText\SpeechToText.csproj" />
     </ItemGroup>
 
