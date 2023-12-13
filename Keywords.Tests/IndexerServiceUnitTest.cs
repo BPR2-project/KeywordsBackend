@@ -42,7 +42,6 @@ public class IndexerServiceUnitTest : TestFixture
         repository.Verify(r => r.Update(entity, "email"), Times.Once);
         result.Count.Should().Be(0);
         entity.State.Should().Be(IndexerState.Failed);
-        
     }
     
     [Fact]
