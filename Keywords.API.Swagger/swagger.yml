@@ -191,6 +191,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Keyword"
+        401:
+          description: Unauthorized
         404:
           description: Not found
 components:  

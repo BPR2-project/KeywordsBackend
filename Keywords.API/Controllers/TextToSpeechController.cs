@@ -22,9 +22,16 @@ public class TextToSpeechController : TextToSpeechControllerBase
             var keyword = _keywordService.GetKeyword(id);
             if (keyword == null)
                 return NotFound();
-            
-            var updatedKeyword = await _textToSpeechService.CreateAudio(id);
-            return Ok(updatedKeyword);
+
+            try
+            {
+                var updatedKeyword = await _textToSpeechService.CreateAudio(id);
+                return Ok(updatedKeyword);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         });
     }
 }

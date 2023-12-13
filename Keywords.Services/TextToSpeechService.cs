@@ -33,8 +33,17 @@ public class TextToSpeechService : ITextToSpeechService
 
     public async Task<Keyword?> CreateAudio(Guid keywordId)
     {
-        var speechConfig = SpeechConfig.FromSubscription(_ttsSubscriptionKey, _ttsRegion);
-
+        SpeechConfig speechConfig;
+        
+        try
+        {
+            speechConfig = SpeechConfig.FromSubscription(_ttsSubscriptionKey, _ttsRegion);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+        
         var keywordEntity = _keywordEntityRepository.GetById(keywordId);
 
         if (!string.IsNullOrEmpty(keywordEntity.AudioLink))
@@ -78,10 +87,9 @@ public class TextToSpeechService : ITextToSpeechService
 
                     synthesisCompleted = true;
                 }
-                catch (Exception exception)
+                catch(Exception ex)
                 {
-                    Console.WriteLine(exception);
-                    throw;
+                    throw new Exception(ex.Message);
                 }
             };
 
